@@ -8,7 +8,7 @@ import { useCustomers } from '@/hooks/useCustomers';
 import { Users, UserPlus } from 'lucide-react';
 
 export default function CustomersPage() {
-  const { customers, loading, applyFilters, addCustomer } = useCustomers();
+  const { customers, loading, applyFilters, addCustomer, updateCustomer, deleteCustomer } = useCustomers();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (loading) {
@@ -52,6 +52,8 @@ export default function CustomersPage() {
             <CustomerTable 
               customers={customers} 
               onFilter={applyFilters}
+              onDelete={deleteCustomer}
+              onEdit={updateCustomer}
             />
           </div>
         </main>

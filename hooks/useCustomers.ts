@@ -12,9 +12,7 @@ export function useCustomers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    loadCustomers();
-  }, []);
+  useEffect(() => { loadCustomers(); }, []);
 
   const loadCustomers = async () => {
     try {
@@ -33,18 +31,29 @@ export function useCustomers() {
     let result = [...customers];
     if (filters.search) {
       const q = filters.search.toLowerCase();
-      result = result.filter(c => 
-        c.name.toLowerCase().includes(q) || 
-        (c.email && c.email.toLowerCase().includes(q))
-      );
+      result = result.filter(c => c.name.toLowerCase().includes(q) || (c.email && c.email.toLowerCase().includes(q)));
     }
     setFilteredCustomers(result);
   };
 
-  const addCustomer = (newCustomer: Customer) => {
-    setCustomers(prev => [newCustomer, ...prev]);
-    setFilteredCustomers(prev => [newCustomer, ...prev]);
+  const addCustomer = async (newCustomer: Omit<Customer, 'id' | 'created_at'>) => {
+    const created = await customerService.createCustomer(newCustomer);
+    setCustomers(prev => [created, ...prev]);
+    setFilteredCustomers(prev => [created, ...prev]);
+    return created;
   };
 
-  return { customers: filteredCustomers, loading, error, refresh: loadCustomers, applyFilters, addCustomer };
+  const updateCustomer = async (updated: Customer) => {
+    const saved = await customerService.updateCustomer(updated.id, { name: updated.name, email: updated.email });
+    setCustomers(prev => prev.map(c => c.id === saved.id ? saved : c));
+    setFilteredCustomers(prev => prev.map(c => c.id === saved.id ? saved : c));
+  };
+
+  const deleteCustomer = async (id: string) => {
+    await customerService.deleteCustomer(id);
+    setCustomers(prev => prev.filter(c => c.id !== id));
+    setFilteredCustomers(prev => prev.filter(c => c.id !== id));
+  };
+
+  return { customers: filteredCustomers, loading, error, refresh: loadCustomers, applyFilters, addCustomer, updateCustomer, deleteCustomer };
 }

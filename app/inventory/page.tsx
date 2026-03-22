@@ -8,7 +8,7 @@ import { useProducts } from '@/hooks/useProducts';
 import { Package, Plus } from 'lucide-react';
 
 export default function InventoryPage() {
-  const { products, loading, applyFilters, addProduct } = useProducts();
+  const { products, loading, applyFilters, addProduct, updateProduct, deleteProduct } = useProducts();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (loading) {
@@ -55,6 +55,8 @@ export default function InventoryPage() {
             <ProductTable 
               products={products} 
               onFilter={applyFilters}
+              onDelete={deleteProduct}
+              onEdit={updateProduct}
             />
           </div>
         </main>

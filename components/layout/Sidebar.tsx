@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, ShoppingCart, Package, Users, ChartBar as BarChart3, LogOut, Leaf } from 'lucide-react';
+import { createBrowserClient } from '@supabase/ssr';
+import { useState } from 'react';
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
@@ -18,6 +20,20 @@ const otherItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY || ''
+  );
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
 
   return (
     <aside className="w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 h-screen flex flex-col transition-colors">
@@ -27,7 +43,7 @@ export function Sidebar() {
             <Package className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">Bhagat&apos;s<br/>One-Stop</h1>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">Bhagat&apos;s<br />One-Stop</h1>
           </div>
         </div>
       </div>
@@ -49,7 +65,7 @@ export function Sidebar() {
                         : 'text-gray-700 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400'
                     }`}
                   >
-                    <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                    <Icon className="w-5 h-5" />
                     {item.label}
                   </Link>
                 </li>
@@ -74,7 +90,7 @@ export function Sidebar() {
                         : 'text-gray-700 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-emerald-600 dark:hover:text-emerald-400'
                     }`}
                   >
-                    <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                    <Icon className="w-5 h-5" />
                     {item.label}
                   </Link>
                 </li>
@@ -85,9 +101,13 @@ export function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-gray-100 dark:border-slate-800">
-        <button className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 w-full transition-all group">
+        <button
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-gray-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 w-full transition-all group disabled:opacity-50"
+        >
           <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          Logout
+          {loggingOut ? 'Signing out...' : 'Logout'}
         </button>
       </div>
     </aside>

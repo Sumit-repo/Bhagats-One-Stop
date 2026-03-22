@@ -10,49 +10,63 @@ interface SummaryCardProps {
   variant: 'green' | 'blue' | 'red' | 'orange';
 }
 
-const variantStyles = {
-  green: 'bg-emerald-600 text-white',
-  blue: 'bg-blue-600 text-white',
-  red: 'bg-red-600 text-white',
-  orange: 'bg-orange-600 text-white',
-};
-
-const iconBgStyles = {
-  green: 'bg-emerald-700',
-  blue: 'bg-blue-700',
-  red: 'bg-red-700',
-  orange: 'bg-orange-700',
+const variants = {
+  green: {
+    card: 'bg-emerald-50 dark:bg-emerald-500/10 border-emerald-100 dark:border-emerald-500/20',
+    icon: 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400',
+    title: 'text-emerald-700 dark:text-emerald-400',
+    value: 'text-emerald-800 dark:text-emerald-300',
+    badge: 'text-emerald-600 dark:text-emerald-400',
+  },
+  red: {
+    card: 'bg-red-50 dark:bg-red-500/10 border-red-100 dark:border-red-500/20',
+    icon: 'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400',
+    title: 'text-red-700 dark:text-red-400',
+    value: 'text-red-800 dark:text-red-300',
+    badge: 'text-red-600 dark:text-red-400',
+  },
+  blue: {
+    card: 'bg-blue-50 dark:bg-blue-500/10 border-blue-100 dark:border-blue-500/20',
+    icon: 'bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400',
+    title: 'text-blue-700 dark:text-blue-400',
+    value: 'text-blue-800 dark:text-blue-300',
+    badge: 'text-blue-600 dark:text-blue-400',
+  },
+  orange: {
+    card: 'bg-orange-50 dark:bg-orange-500/10 border-orange-100 dark:border-orange-500/20',
+    icon: 'bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400',
+    title: 'text-orange-700 dark:text-orange-400',
+    value: 'text-orange-800 dark:text-orange-300',
+    badge: 'text-orange-600 dark:text-orange-400',
+  },
 };
 
 export function SummaryCard({ icon: Icon, title, value, change, variant }: SummaryCardProps) {
+  const v = variants[variant];
   const hasChange = typeof change === 'number';
   const isPositive = change && change > 0;
 
   return (
-    <div className={`rounded-2xl p-6 ${variantStyles[variant]} dark:border dark:border-white/10`}>
+    <div className={`rounded-2xl p-6 border transition-all hover:scale-[1.01] ${v.card}`}>
       <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBgStyles[variant]} dark:bg-white/10`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${v.icon}`}>
+          <Icon className="w-6 h-6" />
         </div>
-      </div>
-
-      <div>
-        <p className="text-sm font-medium mb-1 text-white/80">{title}</p>
-        <p className="text-3xl font-bold mb-2 text-white">{value}</p>
         {hasChange && (
-          <div className="flex items-center gap-1">
-            {isPositive ? (
-              <TrendingUp className="w-4 h-4 text-white" />
-            ) : (
-              <TrendingDown className="w-4 h-4 text-white" />
-            )}
-            <span className="text-sm font-medium text-white">
-              {Math.abs(change!)}%
-            </span>
-            <span className="text-sm text-white/70">this month</span>
+          <div className={`flex items-center gap-1 text-xs font-bold ${v.badge}`}>
+            {isPositive
+              ? <TrendingUp className="w-3.5 h-3.5" />
+              : <TrendingDown className="w-3.5 h-3.5" />}
+            {Math.abs(change!)}%
           </div>
         )}
       </div>
+
+      <p className={`text-xs font-black uppercase tracking-widest mb-1 ${v.title}`}>{title}</p>
+      <p className={`text-3xl font-black ${v.value}`}>{value}</p>
+      {hasChange && (
+        <p className={`text-xs font-medium mt-1 opacity-70 ${v.badge}`}>vs last month</p>
+      )}
     </div>
   );
 }

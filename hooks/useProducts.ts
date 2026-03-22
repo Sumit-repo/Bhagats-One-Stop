@@ -12,9 +12,7 @@ export function useProducts() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    loadProducts();
-  }, []);
+  useEffect(() => { loadProducts(); }, []);
 
   const loadProducts = async () => {
     try {
@@ -31,18 +29,10 @@ export function useProducts() {
 
   const applyFilters = (filters: { category?: string; stockStatus?: string; search?: string; minPrice?: number; maxPrice?: number }) => {
     let result = [...products];
-    if (filters.category && filters.category !== 'all') {
-      result = result.filter(p => p.category === filters.category);
-    }
-    if (filters.stockStatus && filters.stockStatus !== 'all') {
-      result = result.filter(p => filters.stockStatus === 'low' ? p.stock < 50 : p.stock >= 50);
-    }
-    if (filters.minPrice !== undefined) {
-      result = result.filter(p => p.price >= filters.minPrice!);
-    }
-    if (filters.maxPrice !== undefined) {
-      result = result.filter(p => p.price <= filters.maxPrice!);
-    }
+    if (filters.category && filters.category !== 'all') result = result.filter(p => p.category === filters.category);
+    if (filters.stockStatus && filters.stockStatus !== 'all') result = result.filter(p => filters.stockStatus === 'low' ? p.stock < 50 : p.stock >= 50);
+    if (filters.minPrice !== undefined) result = result.filter(p => p.price >= filters.minPrice!);
+    if (filters.maxPrice !== undefined) result = result.filter(p => p.price <= filters.maxPrice!);
     if (filters.search) {
       const q = filters.search.toLowerCase();
       result = result.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
@@ -50,10 +40,24 @@ export function useProducts() {
     setFilteredProducts(result);
   };
 
-  const addProduct = (newProduct: Product) => {
-    setProducts(prev => [newProduct, ...prev]);
-    setFilteredProducts(prev => [newProduct, ...prev]);
+  const addProduct = async (newProduct: Omit<Product, 'id' | 'created_at' | 'sales' | 'quantity_sold'>) => {
+    const created = await productService.createProduct(newProduct);
+    setProducts(prev => [created, ...prev]);
+    setFilteredProducts(prev => [created, ...prev]);
+    return created;
   };
 
-  return { products: filteredProducts, loading, error, refresh: loadProducts, applyFilters, addProduct };
+  const updateProduct = async (updated: Product) => {
+    const saved = await productService.updateProduct(updated.id, updated);
+    setProducts(prev => prev.map(p => p.id === saved.id ? saved : p));
+    setFilteredProducts(prev => prev.map(p => p.id === saved.id ? saved : p));
+  };
+
+  const deleteProduct = async (id: string) => {
+    await productService.deleteProduct(id);
+    setProducts(prev => prev.filter(p => p.id !== id));
+    setFilteredProducts(prev => prev.filter(p => p.id !== id));
+  };
+
+  return { products: filteredProducts, loading, error, refresh: loadProducts, applyFilters, addProduct, updateProduct, deleteProduct };
 }

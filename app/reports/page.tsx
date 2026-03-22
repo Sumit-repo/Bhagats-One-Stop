@@ -1,16 +1,40 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { SalesChart } from '@/components/dashboard/SalesChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { useDashboard } from '@/hooks/useDashboard';
-import { ChartBar as BarChart3, TrendingUp, Calendar, Download, ArrowUpRight } from 'lucide-react';
+import { ChartBar as BarChart3, TrendingUp, Calendar, CalendarRange, ArrowUpRight, X } from 'lucide-react';
 
 export default function ReportsPage() {
-  const { stats, salesData, categorySales, loading } = useDashboard();
+  const [activeFilter, setActiveFilter] = useState<'7' | '30' | 'custom'>('30');
+  const [customStart, setCustomStart] = useState('');
+  const [customEnd, setCustomEnd] = useState('');
+  const [isCustomOpen, setIsCustomOpen] = useState(false);
 
-  if (loading) {
+  const filterDays = activeFilter === '7' ? 7 : (activeFilter === '30' ? 30 : 30);
+  const customRange = activeFilter === 'custom' && customStart && customEnd ? { start: customStart, end: customEnd } : undefined;
+
+  const { stats, salesData, categorySales, loading } = useDashboard(filterDays, customRange);
+
+  const applyCustomFilter = () => {
+    if (customStart && customEnd) {
+      setActiveFilter('custom');
+      setIsCustomOpen(false);
+    }
+  };
+
+  const cancelCustomFilter = () => {
+    setIsCustomOpen(false);
+    if (activeFilter === 'custom') {
+      setActiveFilter('30');
+      setCustomStart('');
+      setCustomEnd('');
+    }
+  };
+
+  if (loading && !stats) { // Only show full loading screen on initial load
     return (
       <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
         <Sidebar />
@@ -29,7 +53,7 @@ export default function ReportsPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
           <div className="max-w-7xl mx-auto uppercase-header-context">
-            <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div>
                 <div className="flex items-center gap-4 mb-3">
                   <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
@@ -39,15 +63,64 @@ export default function ReportsPage() {
                 </div>
                 <p className="text-gray-500 dark:text-slate-400 font-medium">Data-driven insights for Bhagat&apos;s One-Stop</p>
               </div>
-              <div className="flex items-center gap-3">
-                <button className="flex items-center gap-2 px-5 py-3 bg-white dark:bg-slate-900 text-gray-700 dark:text-slate-300 border border-gray-200 dark:border-slate-800 rounded-2xl font-bold hover:bg-gray-50 dark:hover:bg-slate-800 transition-all shadow-sm">
-                  <Calendar className="w-4 h-4" />
-                  Last 30 Days
-                </button>
-                <button className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 dark:shadow-none hover:scale-[1.02] active:scale-95">
-                  <Download className="w-4 h-4" />
-                  Export PDF
-                </button>
+              
+              <div className="relative">
+                <div className="flex flex-wrap items-center gap-2 bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl border border-gray-200 dark:border-slate-800 self-start">
+                  <button 
+                    onClick={() => { setActiveFilter('7'); setIsCustomOpen(false); }}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '7' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    <Calendar className="w-4 h-4" />
+                    Last 7 Days
+                  </button>
+                  <button 
+                    onClick={() => { setActiveFilter('30'); setIsCustomOpen(false); }}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '30' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    <Calendar className="w-4 h-4" />
+                    Last 30 Days
+                  </button>
+                  <button 
+                    onClick={() => setIsCustomOpen(!isCustomOpen)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === 'custom' || isCustomOpen ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    <CalendarRange className="w-4 h-4" />
+                    Custom {activeFilter === 'custom' && customStart && `(${new Date(customStart).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})} - ${new Date(customEnd).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})})`}
+                  </button>
+                </div>
+
+                {isCustomOpen && (
+                  <div className="absolute right-0 top-14 w-[320px] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-2xl rounded-2xl p-5 z-50">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">Custom Range</h4>
+                      <button onClick={cancelCustomFilter} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300"><X className="w-4 h-4" /></button>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-1">Start Date</label>
+                        <input 
+                          type="date" 
+                          value={customStart}
+                          onChange={(e) => setCustomStart(e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border-none rounded-lg text-sm font-medium text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500/40 outline-none  dark:[&::-webkit-calendar-picker-indicator]:invert"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-1">End Date</label>
+                        <input 
+                          type="date" 
+                          value={customEnd}
+                          onChange={(e) => setCustomEnd(e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-50 dark:bg-slate-900 border-none rounded-lg text-sm font-medium text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500/40 outline-none  dark:[&::-webkit-calendar-picker-indicator]:invert"
+                        />
+                      </div>
+                      <button 
+                        onClick={applyCustomFilter}
+                        disabled={!customStart || !customEnd || customStart > customEnd}
+                        className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                      >
+                        Apply Range
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

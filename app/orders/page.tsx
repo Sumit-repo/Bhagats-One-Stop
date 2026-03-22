@@ -8,7 +8,7 @@ import { useOrders } from '@/hooks/useOrders';
 import { ShoppingCart, Plus } from 'lucide-react';
 
 export default function OrdersPage() {
-  const { orders, loading, applyFilters, addOrder } = useOrders();
+  const { orders, loading, applyFilters, addOrder, updateOrderStatus, deleteOrder } = useOrders();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (loading) {
@@ -53,6 +53,8 @@ export default function OrdersPage() {
             <OrderTable 
               orders={orders} 
               onFilter={applyFilters}
+              onDelete={deleteOrder}
+              onUpdateStatus={updateOrderStatus}
             />
           </div>
         </main>

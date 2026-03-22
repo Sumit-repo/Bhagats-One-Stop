@@ -87,28 +87,31 @@ export default function TeaFarmPage() {
               <EarningTable earnings={earnings} onDelete={deleteEarning} />
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-gray-100 dark:border-slate-800 shadow-sm transition-colors">
+              <h2 className="text-xs font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest mb-6">Financial Summary</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-6 bg-gray-50 rounded-xl">
-                  <p className="text-sm text-gray-600 mb-2">Total Expenses</p>
-                  <p className="text-3xl font-bold text-red-600">
+                <div className="text-center p-6 bg-red-50 dark:bg-red-500/5 border border-red-100 dark:border-red-500/10 rounded-2xl">
+                  <p className="text-sm font-bold text-red-500 dark:text-red-400 mb-2 uppercase tracking-wider text-xs">Total Expenses</p>
+                  <p className="text-3xl font-black text-red-600 dark:text-red-400">
                     ₹{summary?.total_investment.toFixed(2) || '0.00'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">{expenses.length} transactions</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 font-medium mt-2">{expenses.length} transactions</p>
                 </div>
-                <div className="text-center p-6 bg-gray-50 rounded-xl">
-                  <p className="text-sm text-gray-600 mb-2">Total Earnings</p>
-                  <p className="text-3xl font-bold text-emerald-600">
+                <div className="text-center p-6 bg-emerald-50 dark:bg-emerald-500/5 border border-emerald-100 dark:border-emerald-500/10 rounded-2xl">
+                  <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-2 uppercase tracking-wider text-xs">Total Earnings</p>
+                  <p className="text-3xl font-black text-emerald-600 dark:text-emerald-400">
                     ₹{summary?.total_earnings.toFixed(2) || '0.00'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">{earnings.length} transactions</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 font-medium mt-2">{earnings.length} transactions</p>
                 </div>
-                <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border border-emerald-100">
-                  <p className="text-sm text-gray-600 mb-2">Net {isProfitable ? 'Profit' : 'Loss'}</p>
-                  <p className={`text-3xl font-bold ${isProfitable ? 'text-emerald-600' : 'text-red-600'}`}>
+                <div className={`text-center p-6 rounded-2xl border transition-colors ${isProfitable
+                  ? 'bg-emerald-50 dark:bg-emerald-500/5 border-emerald-200 dark:border-emerald-500/20'
+                  : 'bg-red-50 dark:bg-red-500/5 border-red-200 dark:border-red-500/20'}`}>
+                  <p className="text-xs font-black text-gray-400 dark:text-slate-500 mb-2 uppercase tracking-wider">Net {isProfitable ? 'Profit' : 'Loss'}</p>
+                  <p className={`text-3xl font-black ${isProfitable ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                     {isProfitable ? '+' : '-'}₹{Math.abs(profitLoss).toFixed(2)}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">Overall balance</p>
+                  <p className="text-xs text-gray-400 dark:text-slate-500 font-medium mt-2">Overall balance</p>
                 </div>
               </div>
             </div>

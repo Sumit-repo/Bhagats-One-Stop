@@ -27,10 +27,6 @@ export function RecentOrders({ orders = [] }: RecentOrdersProps) {
     <div className="bg-transparent dark:bg-transparent transition-colors">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-black text-gray-900 dark:text-white">Recent Activity</h3>
-        <button className="flex items-center gap-2 px-4 py-2 bg-gray-50 dark:bg-slate-800 rounded-xl text-xs font-bold text-gray-600 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors">
-          <Filter className="w-4 h-4" />
-          More Details
-        </button>
       </div>
 
       <div className="overflow-x-auto">

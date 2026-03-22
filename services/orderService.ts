@@ -1,65 +1,41 @@
-import { supabase } from '@/lib/supabase';
-import { Order, OrderSummary } from '@/models/Order';
-import { MOCK_ORDERS } from '@/lib/mockData';
+import { Order, OrderSummary, OrderStatus } from '@/models/Order';
 
 export class OrderService {
   async getAllOrders(): Promise<Order[]> {
-    if (!supabase) {
-      return MOCK_ORDERS;
-    }
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('order_date', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
+    const res = await fetch('/api/orders');
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
   }
 
   async getRecentOrders(limit: number = 10): Promise<OrderSummary[]> {
-    if (!supabase) {
-      return MOCK_ORDERS.slice(0, limit);
-    }
-    const { data, error } = await supabase
-      .from('orders')
-      .select('order_number, product_name, customer_name, status, price, order_date')
-      .order('order_date', { ascending: false })
-      .limit(limit);
-
-    if (error) throw error;
-    return data || [];
-  }
-
-  private getMockOrders(): Order[] {
-    return [
-      { id: '1', order_number: 1001, product_name: 'Premium Toned Milk', customer_name: 'Anjali Singh', status: 'delivered', price: 450, order_date: '2024-03-22', created_at: new Date().toISOString() },
-      { id: '2', order_number: 1002, product_name: 'Amul Butter 500g', customer_name: 'Rajesh Kumar', status: 'shipped', price: 280, order_date: '2024-03-22', created_at: new Date().toISOString() },
-      { id: '3', order_number: 1003, product_name: 'Sudha Curd 1kg', customer_name: 'Priya Verma', status: 'processing', price: 90, order_date: '2024-03-21', created_at: new Date().toISOString() },
-      { id: '4', order_number: 1004, product_name: 'Daily Biscuits Combo', customer_name: 'Suresh Raina', status: 'pending', price: 550, order_date: '2024-03-21', created_at: new Date().toISOString() },
-      { id: '5', order_number: 1005, product_name: 'Mixed Spices Set', customer_name: 'Amitabh Jha', status: 'delivered', price: 1200, order_date: '2024-03-20', created_at: new Date().toISOString() },
-    ];
+    const res = await fetch('/api/orders');
+    if (!res.ok) throw new Error(await res.text());
+    const data: Order[] = await res.json();
+    return data.slice(0, limit);
   }
 
   async createOrder(order: Omit<Order, 'id' | 'created_at'>): Promise<Order> {
-    const { data, error } = await supabase
-      .from('orders')
-      .insert([order])
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order)
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
   }
 
-  async updateOrderStatus(id: string, status: string): Promise<Order> {
-    const { data, error } = await supabase
-      .from('orders')
-      .update({ status })
-      .eq('id', id)
-      .select()
-      .single();
+  async updateOrderStatus(id: string, status: OrderStatus): Promise<Order> {
+    const res = await fetch(`/api/orders/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
 
-    if (error) throw error;
-    return data;
+  async deleteOrder(id: string): Promise<void> {
+    const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(await res.text());
   }
 }

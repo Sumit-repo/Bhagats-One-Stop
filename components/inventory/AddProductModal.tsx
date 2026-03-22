@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Package, Trash2, Plus } from 'lucide-react';
+import { X, Package, Trash2, Plus, Upload } from 'lucide-react';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -15,23 +15,50 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
     category: 'Dairy',
     price: '',
     stock: '',
-    unit: 'pcs'
   });
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({
-      ...formData,
-      id: Math.random().toString(36).substr(2, 9),
-      price: parseFloat(formData.price),
-      stock: parseInt(formData.stock),
-      quantity_sold: 0,
-      sales: 0
-    });
-    setFormData({ name: '', category: 'Dairy', price: '', stock: '', unit: 'pcs' });
-    onClose();
+    setError('');
+    setUploading(true);
+    
+    try {
+      let image_url = '';
+      if (file) {
+        const uploadData = new FormData();
+        uploadData.append('file', file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadData,
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Upload failed');
+        }
+        const data = await res.json();
+        image_url = data.url;
+      }
+
+      await onAdd({
+        name: formData.name,
+        category: formData.category,
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        image_url
+      });
+      setFormData({ name: '', category: 'Dairy', price: '', stock: '' });
+      setFile(null);
+      onClose();
+    } catch (err: any) {
+      setError(err.message || 'Failed to create product');
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -53,6 +80,28 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="p-3 text-sm font-medium text-red-600 bg-red-50 dark:bg-red-500/10 rounded-xl">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label className="block text-xs font-black uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Product Image (Optional)</label>
+            <div className="flex items-center gap-4">
+              <label className="flex-1 cursor-pointer w-full px-4 py-3 bg-gray-50 dark:bg-slate-800 border border-dashed border-gray-300 dark:border-slate-600 rounded-xl text-sm font-bold dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex justify-center items-center gap-2">
+                <Upload className="w-4 h-4" />
+                <span>{file ? file.name : 'Upload Image'}</span>
+                <input 
+                  type="file" 
+                  accept="image/*,video/*"
+                  className="hidden"
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                />
+              </label>
+            </div>
+          </div>
+
           <div>
             <label className="block text-xs font-black uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-2">Product Name</label>
             <input 
@@ -106,9 +155,12 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
 
           <button 
             type="submit"
-            className="w-full py-4 bg-emerald-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-emerald-200 dark:shadow-none hover:bg-emerald-700 transition-all active:scale-95"
+            disabled={uploading}
+            className={`w-full py-4 rounded-2xl font-black text-lg shadow-xl dark:shadow-none transition-all active:scale-95 ${
+              uploading ? 'bg-emerald-400 cursor-not-allowed text-white' : 'bg-emerald-600 text-white shadow-emerald-200 hover:bg-emerald-700'
+            }`}
           >
-            Create Product
+            {uploading ? 'Creating...' : 'Create Product'}
           </button>
         </form>
       </div>

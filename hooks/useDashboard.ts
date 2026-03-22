@@ -6,7 +6,7 @@ import { DashboardStats, SalesData, CategorySales } from '@/models/Dashboard';
 
 const dashboardService = new DashboardService();
 
-export function useDashboard() {
+export function useDashboard(days: number = 30, customRange?: { start: string; end: string }) {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [salesData, setSalesData] = useState<SalesData[]>([]);
   const [categorySales, setCategorySales] = useState<CategorySales[]>([]);
@@ -15,15 +15,15 @@ export function useDashboard() {
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [days, customRange?.start, customRange?.end]); // Re-fetch when filter changes
 
   const loadDashboardData = async () => {
     try {
       setLoading(true);
       const [statsData, salesData, categoryData] = await Promise.all([
-        dashboardService.getDashboardStats(),
-        dashboardService.getSalesData(),
-        dashboardService.getCategorySales(),
+        dashboardService.getDashboardStats(days, customRange),
+        dashboardService.getSalesData(days, customRange),
+        dashboardService.getCategorySales(days, customRange),
       ]);
       setStats(statsData);
       setSalesData(salesData);
