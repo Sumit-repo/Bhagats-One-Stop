@@ -8,7 +8,7 @@ const productService = new ProductService();
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [topProducts, setTopProducts] = useState<ProductSummary[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -19,12 +19,9 @@ export function useProducts() {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const [allProducts, top] = await Promise.all([
-        productService.getAllProducts(),
-        productService.getTopProducts(),
-      ]);
+      const allProducts = await productService.getAllProducts();
       setProducts(allProducts);
-      setTopProducts(top);
+      setFilteredProducts(allProducts);
     } catch (err) {
       setError(err as Error);
     } finally {
@@ -32,5 +29,31 @@ export function useProducts() {
     }
   };
 
-  return { products, topProducts, loading, error, refresh: loadProducts };
+  const applyFilters = (filters: { category?: string; stockStatus?: string; search?: string; minPrice?: number; maxPrice?: number }) => {
+    let result = [...products];
+    if (filters.category && filters.category !== 'all') {
+      result = result.filter(p => p.category === filters.category);
+    }
+    if (filters.stockStatus && filters.stockStatus !== 'all') {
+      result = result.filter(p => filters.stockStatus === 'low' ? p.stock < 50 : p.stock >= 50);
+    }
+    if (filters.minPrice !== undefined) {
+      result = result.filter(p => p.price >= filters.minPrice!);
+    }
+    if (filters.maxPrice !== undefined) {
+      result = result.filter(p => p.price <= filters.maxPrice!);
+    }
+    if (filters.search) {
+      const q = filters.search.toLowerCase();
+      result = result.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+    }
+    setFilteredProducts(result);
+  };
+
+  const addProduct = (newProduct: Product) => {
+    setProducts(prev => [newProduct, ...prev]);
+    setFilteredProducts(prev => [newProduct, ...prev]);
+  };
+
+  return { products: filteredProducts, loading, error, refresh: loadProducts, applyFilters, addProduct };
 }

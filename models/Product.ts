@@ -7,6 +7,7 @@ export interface Product {
   stock: number;
   image_url?: string;
   created_at: string;
+  sales: number;
 }
 
 export interface ProductSummary {

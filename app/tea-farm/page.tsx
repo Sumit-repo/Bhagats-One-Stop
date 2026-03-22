@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Wallet, Plus } from 'lucide-react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { Header } from '@/components/layout/Header';
 import { SummaryCard } from '@/components/teaFarm/SummaryCard';
 import { ProfitChart } from '@/components/teaFarm/ProfitChart';
 import { ExpenseTable } from '@/components/teaFarm/ExpenseTable';
@@ -17,12 +16,12 @@ export default function TeaFarmPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen">
+      <div className="flex h-screen bg-white dark:bg-slate-950">
         <Sidebar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading tea farm data...</p>
+            <p className="mt-4 text-gray-600 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Loading tea farm data...</p>
           </div>
         </div>
       </div>
@@ -33,22 +32,21 @@ export default function TeaFarmPage() {
   const isProfitable = profitLoss >= 0;
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header />
         <main className="flex-1 overflow-y-auto">
           <div className="p-8">
             <div className="mb-8 flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">Tea Farm Management</h1>
-                <p className="text-gray-600">Track your tea farm expenses and earnings</p>
+                <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-1">Tea Farm Management</h1>
+                <p className="text-gray-500 dark:text-slate-400 font-medium">Track your tea farm expenses and earnings</p>
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                className="flex items-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-[2rem] font-black text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200 dark:shadow-none hover:scale-[1.02] active:scale-95"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-6 h-6" />
                 Add Entry
               </button>
             </div>

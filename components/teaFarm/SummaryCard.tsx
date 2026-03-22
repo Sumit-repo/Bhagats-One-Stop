@@ -1,6 +1,6 @@
 'use client';
 
-import { Video as LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
+import { type LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 
 interface SummaryCardProps {
   icon: LucideIcon;
@@ -29,9 +29,9 @@ export function SummaryCard({ icon: Icon, title, value, change, variant }: Summa
   const isPositive = change && change > 0;
 
   return (
-    <div className={`rounded-2xl p-6 ${variantStyles[variant]}`}>
+    <div className={`rounded-2xl p-6 ${variantStyles[variant]} dark:border dark:border-white/10`}>
       <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBgStyles[variant]}`}>
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBgStyles[variant]} dark:bg-white/10`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
       </div>
