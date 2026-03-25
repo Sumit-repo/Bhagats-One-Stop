@@ -1,70 +1,77 @@
 'use client';
 
-import React from 'react';
-import { History, Milestone } from 'lucide-react';
-
-const milestones = [
-  {
-    year: '1990',
-    title: 'Store Founded',
-    description: 'Began as a small neighborhood grocery point.',
-    category: 'The Beginning'
-  },
-  {
-    year: '2005',
-    title: 'Major Expansion',
-    description: 'Introduced fresh dairy and bakery sections.',
-    category: 'Growth'
-  },
-  {
-    year: '2015',
-    title: 'Modernization',
-    description: 'Digital inventory and state-of-the-art storage.',
-    category: 'Innovation'
-  },
-  {
-    year: '2024',
-    title: 'One-Stop Point',
-    description: 'The ultimate destination for all your needs.',
-    category: 'Today'
-  }
-];
+import { timelineEvents } from '@/lib/content';
+import { motion } from 'framer-motion';
 
 export function Timeline() {
   return (
-    <section id="legacy" className="py-24 bg-emerald-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-4 mb-16">
-          <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-200">
-            <History className="text-white w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Our Legacy</h2>
-            <p className="text-emerald-700 font-bold uppercase tracking-widest text-xs">Over 3 Decades of Excellence</p>
-          </div>
-        </div>
+    <section className="section" id="trust">
+      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <span className="section-label label-primary">🏛️ Our Journey</span>
+        <h2 className="section-title">Built on Trust. Grown by Community.</h2>
+        <p className="section-subtitle" style={{ margin: '0.75rem auto 0' }}>
+          From a humble electronics shop to your neighborhood's most trusted one-stop destination.
+        </p>
+      </div>
 
-        <div className="relative">
-          {/* Horizontal Line */}
-          <div className="absolute top-1/2 left-0 w-full h-0.5 bg-emerald-200 -translate-y-1/2 hidden md:block" />
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
-            {milestones.map((item, index) => (
-              <div key={index} className="group relative">
-                <div className="mb-6 md:mb-12 flex flex-col items-center md:items-start">
-                  <span className="text-4xl font-black text-emerald-600 mb-2">{item.year}</span>
-                  <div className="w-12 h-12 rounded-full bg-white border-4 border-emerald-500 shadow-xl flex items-center justify-center mb-6 z-10 group-hover:scale-125 transition-transform duration-500">
-                    <Milestone className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div className="text-center md:text-left">
-                    <span className="text-xs font-bold text-emerald-700 uppercase tracking-widest mb-1 block">{item.category}</span>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
-                  </div>
-                </div>
+      <div style={{ position: 'relative' }}>
+        {/* Horizontal Line connecting dots */}
+        <div style={{ 
+          position: 'absolute', top: '24px', left: '0', right: '0', 
+          height: '2px', background: 'var(--border-color)', zIndex: 0 
+        }}></div>
+        <motion.div 
+          initial={{ width: 0 }}
+          whileInView={{ width: '100%' }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: 'easeInOut' }}
+          style={{ 
+            position: 'absolute', top: '24px', left: '0', 
+            height: '2px', background: 'var(--accent-primary)', zIndex: 1 
+          }}
+        ></motion.div>
+
+        <div style={{ 
+          display: 'flex', justifyContent: 'space-between', gap: '1.5rem', 
+          position: 'relative', zIndex: 2, overflowX: 'auto', paddingBottom: '2rem' 
+        }}>
+          {timelineEvents.map((event, index) => (
+            <motion.div 
+              key={index} 
+              initial={{ y: 40, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.15, duration: 0.5 }}
+              style={{ flex: '1', minWidth: '230px', textAlign: 'center' }}
+            >
+              <div style={{ 
+                width: '14px', height: '14px', borderRadius: '50%', margin: '17px auto 20px',
+                background: event.highlight ? 'var(--accent-primary)' : 'var(--card-bg-solid)',
+                border: `3px solid ${event.highlight ? 'var(--accent-primary)' : 'var(--border-color)'}`,
+                boxShadow: event.highlight ? '0 0 12px var(--accent-primary)' : 'none',
+                transition: 'all 0.3s'
+              }}></div>
+              
+              <div style={{ 
+                background: 'var(--card-bg)', 
+                backdropFilter: 'blur(12px)',
+                padding: '1.5rem', 
+                borderRadius: '16px', 
+                border: `1px solid ${event.highlight ? 'var(--accent-primary)' : 'var(--border-color)'}`,
+                transition: 'all 0.3s ease'
+              }}>
+                <span style={{ 
+                  fontSize: '0.75rem', fontWeight: 700, color: 'var(--accent-primary)', 
+                  display: 'block', marginBottom: '0.5rem', letterSpacing: '0.05em' 
+                }}>{event.year}</span>
+                <span style={{ 
+                  fontSize: '1.1rem', fontWeight: 600, display: 'block', 
+                  marginBottom: '0.5rem', color: 'var(--text-color)' 
+                }}>{event.title}</span>
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: 1.6 }}>{event.desc}</p>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

@@ -37,16 +37,20 @@ export function Sidebar() {
 
   return (
     <aside className="w-64 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 h-screen flex flex-col transition-colors">
-      <div className="p-6 border-b border-gray-200 dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
-            <Package className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white leading-tight">Bhagat&apos;s<br />One-Stop</h1>
-          </div>
-        </div>
-      </div>
+    <div className="p-6 border-b border-gray-200 dark:border-slate-800">
+      <Link href="/dashboard" className="flex items-center group">
+        <img 
+          src="/logo-dark.png" 
+          alt="Bhagat's One-Stop Point" 
+          className="h-10 w-auto dark:hidden object-contain"
+        />
+        <img 
+          src="/logo-light.png" 
+          alt="Bhagat's One-Stop Point" 
+          className="h-10 w-auto hidden dark:block object-contain"
+        />
+      </Link>
+    </div>
 
       <nav className="flex-1 p-4 overflow-y-auto">
         <div className="mb-6">

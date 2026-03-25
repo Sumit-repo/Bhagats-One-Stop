@@ -1,20 +1,20 @@
-'use client';
-
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
+import { siteMeta } from '@/lib/content';
 
 export function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/919999999999" // Placeholder number
+      href={`https://wa.me/${siteMeta.phone}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-8 right-8 z-[100] group flex items-center gap-3 bg-emerald-500 text-white p-4 rounded-full shadow-2xl shadow-emerald-300 hover:bg-emerald-600 transition-all duration-500 hover:scale-110 active:scale-95"
+      className="fixed bottom-8 right-8 z-[100] group flex items-center justify-center bg-[#25d366] text-white p-4 rounded-full shadow-xl shadow-black/10 hover:bg-[#1da851] transition-all duration-300 hover:scale-105 active:scale-95"
+      aria-label="Chat with us on WhatsApp"
     >
-      <div className="w-8 h-8 flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <MessageCircle className="w-8 h-8" />
       </div>
-      <span className="max-w-0 overflow-hidden whitespace-nowrap font-bold group-hover:max-w-[200px] transition-all duration-500 ease-in-out">
+      <span className="max-w-0 overflow-hidden whitespace-nowrap font-bold group-hover:max-w-xs transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 group-hover:ml-3">
         Chat with us
       </span>
     </a>

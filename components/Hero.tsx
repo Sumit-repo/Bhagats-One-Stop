@@ -17,7 +17,7 @@ const slides = [
     title: 'General Store',
     subtitle: 'Everything You Need',
     description: 'From snacks to household items, we are your one-stop point.',
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1000', // Placeholder, using same for consistency
+    image: "https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=1600&auto=format&fit=crop", // General store/Aisle placeholder',
     color: 'teal'
   },
   {
@@ -34,17 +34,17 @@ export function Hero() {
   const [activeSlide, setActiveSlide] = useState(1);
 
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden bg-slate-50">
+    <section className="relative pt-32 pb-20 overflow-hidden bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm font-bold uppercase tracking-wider mb-4 animate-bounce">
             <Sparkles className="w-4 h-4" />
-            <span>Trusted since 1990</span>
+            <span>Trusted since 1999</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-black text-foreground mb-6 tracking-tight">
             Quality You Can <span className="text-emerald-600 underline decoration-emerald-200 underline-offset-8">Trust</span>
           </h1>
-          <p className="max-w-2xl mx-auto text-xl text-gray-600 font-medium">
+          <p className="max-w-2xl mx-auto text-xl text-muted-foreground font-medium">
             Your neighborhood favorite for fresh dairy, groceries, and daily essentials.
           </p>
         </div>
@@ -54,7 +54,7 @@ export function Hero() {
             <div
               key={slide.id}
               onClick={() => setActiveSlide(slide.id)}
-              className={`relative cursor-pointer overflow-hidden rounded-3xl transition-all duration-700 ease-in-out ${activeSlide === slide.id ? 'flex-[3] shadow-2xl shadow-emerald-200' : 'flex-1 hover:flex-[1.2]'
+              className={`relative cursor-pointer overflow-hidden rounded-3xl transition-all duration-700 ease-in-out ${activeSlide === slide.id ? 'flex-[3] shadow-xl shadow-black/10' : 'flex-1 hover:flex-[1.2]'
                 }`}
             >
               <img

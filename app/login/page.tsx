@@ -55,10 +55,11 @@ export default function LoginPage() {
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-2xl">
           {/* Logo */}
           <div className="flex flex-col items-center mb-10">
-            <div className="w-16 h-16 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30 mb-5">
-              <Package className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-2xl font-black text-white tracking-tight">Bhagat&apos;s One-Stop</h1>
+            <img 
+              src="/logo-light.png" 
+              alt="Bhagat's One-Stop Point" 
+              className="h-20 w-auto mb-4 object-contain"
+            />
             <p className="text-slate-400 text-sm font-medium mt-1">Business Management Portal</p>
           </div>
 
