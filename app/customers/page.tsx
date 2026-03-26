@@ -15,8 +15,11 @@ export default function CustomersPage() {
     return (
       <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
         <Sidebar />
-        <div className="flex-1 p-6 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+        <div className="flex-1 p-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 dark:bg-slate-800 rounded w-1/4"></div>
+            <div className="h-96 bg-gray-200 dark:bg-slate-800 rounded"></div>
+          </div>
         </div>
       </div>
     );

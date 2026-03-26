@@ -34,13 +34,14 @@ export default function ReportsPage() {
     }
   };
 
-  if (loading && !stats) { // Only show full loading screen on initial load
+  if (loading && !stats) { 
     return (
       <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
         <Sidebar />
-        <div className="flex-1 flex flex-col">
-          <div className="flex-1 flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Generating Analytics Reports...</p>
           </div>
         </div>
       </div>
