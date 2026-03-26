@@ -71,12 +71,21 @@
   }
 }
 
-/* ===================== Custom Scrollbar ===================== */
+/* ===================== Universal Custom Scrollbar ===================== */
 
-/* Webkit (Chrome, Edge, Safari) */
+/* Ensures the Root HTML and Internal Containers look identical */
+html, 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #10b981 transparent;
+}
+
+scrollbar
+
+/* Webkit Styling */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -84,36 +93,26 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #10b981; /* emerald-500 */
-  border-radius: 999px;
-  transition: background 0.2s;
+  background-color: #10b981;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #059669; /* emerald-600 */
+  background-color: #059669;
 }
 
-/* Dark mode track */
-.dark ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.4); /* slate-950/40 */
+/* Hide Scrollbar Buttons (Arrows) to match minimal style */
+::-webkit-scrollbar-button {
+  display: none;
 }
 
+/* Dark Mode Consistency */
 .dark ::-webkit-scrollbar-thumb {
-  background: #064e3b; /* emerald-900 */
+  background-color: #10b981;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #10b981; /* emerald-500 */
-}
-
-/* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #10b981 transparent;
-}
-
-.dark * {
-  scrollbar-color: #064e3b rgba(15, 23, 42, 0.4);
+  background-color: #34d399;
 }
 
 /* Custom CSS for new imported components */
@@ -239,4 +238,3 @@
 .floating-whatsapp:hover {
   transform: scale(1.1);
 }
-

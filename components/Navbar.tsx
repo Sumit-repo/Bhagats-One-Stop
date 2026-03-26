@@ -8,19 +8,19 @@ export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="fixed w-full z-50 bg-background/80 backdrop-blur-md border-b border-emerald-100 dark:border-border">
+    <nav className="fixed left-0 top-0 w-[calc(100%-8px)] z-[50] bg-background/80 backdrop-blur-md border-b border-emerald-100 dark:border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center gap-3">
             <Link href="/" className="flex items-center group py-2">
-              <img 
-                src="/logo-dark.png" 
-                alt="Bhagat's One-Stop Point" 
+              <img
+                src="/logo-dark.png"
+                alt="Bhagat's One-Stop Point"
                 className="h-12 w-auto dark:hidden object-contain"
               />
-              <img 
-                src="/logo-light.png" 
-                alt="Bhagat's One-Stop Point" 
+              <img
+                src="/logo-light.png"
+                alt="Bhagat's One-Stop Point"
                 className="h-12 w-auto hidden dark:block object-contain"
               />
             </Link>

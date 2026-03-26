@@ -55,9 +55,9 @@ export default function LoginPage() {
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-2xl">
           {/* Logo */}
           <div className="flex flex-col items-center mb-10">
-            <img 
-              src="/logo-light.png" 
-              alt="Bhagat's One-Stop Point" 
+            <img
+              src="/logo-light.png"
+              alt="Bhagat's One-Stop Point"
               className="h-20 w-auto mb-4 object-contain"
             />
             <p className="text-slate-400 text-sm font-medium mt-1">Business Management Portal</p>

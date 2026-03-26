@@ -23,14 +23,14 @@ export default function Home() {
       <div className="scroll-mt-24 min-h-[90vh]" id="contact">
         <Contact />
       </div>
-      
+
       {/* Professional Slim Footer */}
       <footer className="bg-slate-950 py-6 border-t border-slate-900">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img 
-              src="/logo-light.png" 
-              alt="Bhagat's One-Stop Point" 
+            <img
+              src="/logo-light.png"
+              alt="Bhagat's One-Stop Point"
               className="h-7 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
             />
             <div className="h-4 w-px bg-slate-800 hidden md:block" />
