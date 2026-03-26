@@ -3,12 +3,13 @@ import { Star } from 'lucide-react';
 
 export function Testimonials() {
   return (
-    <section className="section" id="reviews">
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <span className="section-label label-primary">💬 Community Love</span>
-        <h2 className="section-title">What Our Neighborhood Says</h2>
-        <p className="section-subtitle" style={{ margin: '0.75rem auto 0' }}>Real reviews from our Google Maps family.</p>
-      </div>
+    <section className="py-24 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <span className="section-label label-primary animate-pulse">💬 Community Love</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4 tracking-tight">What Our Neighborhood Says</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto font-medium">Real reviews from our Google Maps family.</p>
+        </div>
 
       <div style={{ 
         display: 'grid', 
@@ -49,6 +50,7 @@ export function Testimonials() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </section>
   );

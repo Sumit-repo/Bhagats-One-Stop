@@ -5,14 +5,15 @@ import { motion } from 'framer-motion';
 
 export function Timeline() {
   return (
-    <section className="section" id="trust">
-      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <span className="section-label label-primary">🏛️ Our Journey</span>
-        <h2 className="section-title">Built on Trust. Grown by Community.</h2>
-        <p className="section-subtitle" style={{ margin: '0.75rem auto 0' }}>
-          From a humble electronics shop to your neighborhood's most trusted one-stop destination.
-        </p>
-      </div>
+    <section className="py-24 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <span className="section-label label-primary animate-pulse">🏛️ Our Journey</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4 tracking-tight">Built on Trust. Grown by Community.</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto font-medium">
+            From a humble electronics shop to your neighborhood's most trusted one-stop destination.
+          </p>
+        </div>
 
       <div style={{ position: 'relative' }}>
         {/* Horizontal Line connecting dots */}
@@ -74,6 +75,7 @@ export function Timeline() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }

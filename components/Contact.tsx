@@ -3,13 +3,17 @@ import { GoogleRating } from './GoogleRating';
 
 export function Contact() {
   return (
-    <section className="section" id="contact" style={{ textAlign: 'center' }}>
-      <span className="section-label label-primary">📍 Get In Touch</span>
-      <h2 className="section-title">{siteMeta.contactTitle}</h2>
-      
-      <div style={{ marginTop: '1.5rem', marginBottom: '2.5rem', display: 'flex', justifyContent: 'center' }}>
-        <GoogleRating />
-      </div>
+    <section className="py-12 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <span className="section-label label-primary animate-pulse">📍 Get In Touch</span>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4 tracking-tight">{siteMeta.contactTitle}</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto font-medium">Find us in the neighborhood or reach out for home delivery.</p>
+        </div>
+        
+        <div className="flex justify-center mb-10">
+          <GoogleRating />
+        </div>
 
       <div style={{ 
         display: 'grid', 
@@ -49,6 +53,7 @@ export function Contact() {
           </div>
         </div>
 
+      </div>
       </div>
     </section>
   );
