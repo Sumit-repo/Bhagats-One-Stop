@@ -9,13 +9,9 @@ export function PublicFooter() {
           <div className="flex items-center gap-3">
             <img
               src="/logo-light.png"
-              alt="Bhagat's"
+              alt="Bhagat's — One-Stop Point"
               className="h-7 w-auto opacity-70 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-300"
             />
-            <div className="flex flex-col leading-tight">
-              <span className="text-slate-300 text-sm font-black">Bhagat&apos;s</span>
-              <span className="text-emerald-500 text-[9px] font-bold uppercase tracking-[0.2em]">One-Stop Point</span>
-            </div>
             <div className="h-4 w-px bg-slate-800 hidden md:block" />
             <p className="text-slate-500 text-[11px] font-bold uppercase tracking-[0.2em] hidden md:block">
               Trusted Since 1999 · Kishanganj
