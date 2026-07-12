@@ -5,7 +5,8 @@ import { DashboardShell } from '@/components/layout/DashboardShell';
 import { SalesChart } from '@/components/dashboard/SalesChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { useDashboard } from '@/hooks/useDashboard';
-import { ChartBar as BarChart3, TrendingUp, Calendar, CalendarRange, ArrowUpRight, X } from 'lucide-react';
+import { ChartBar as BarChart3, TrendingUp, Calendar, CalendarRange, ArrowUpRight, X, Download, Printer } from 'lucide-react';
+import { downloadCsv, printPage } from '@/lib/exportUtils';
 
 export default function ReportsPage() {
   const [activeFilter, setActiveFilter] = useState<'7' | '30' | 'custom'>('30');
@@ -17,6 +18,14 @@ export default function ReportsPage() {
   const customRange = activeFilter === 'custom' && customStart && customEnd ? { start: customStart, end: customEnd } : undefined;
 
   const { stats, salesData, categorySales, loading } = useDashboard(filterDays, customRange);
+
+  const handleExportCsv = () => {
+    const rows = [
+      ...(salesData || []).map(d => ({ Type: 'Daily Revenue', Date: d.day, Amount: d.amount, Category: '', Percentage: '' })),
+      ...(categorySales || []).map(c => ({ Type: 'Category', Date: '', Amount: c.amount, Category: c.category, Percentage: c.percentage })),
+    ];
+    downloadCsv(`reports-${activeFilter}.csv`, rows);
+  };
 
   const applyCustomFilter = () => {
     if (customStart && customEnd) {
@@ -63,6 +72,21 @@ export default function ReportsPage() {
                 <p className="text-gray-500 dark:text-slate-400 font-medium">Data-driven insights for Bhagat&apos;s One-Stop</p>
               </div>
               
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleExportCsv}
+                  className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-bold text-gray-700 dark:text-slate-300 rounded-2xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  <span className="hidden sm:inline">CSV</span>
+                </button>
+                <button
+                  onClick={printPage}
+                  className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-sm font-bold text-gray-700 dark:text-slate-300 rounded-2xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span className="hidden sm:inline">Print</span>
+                </button>
               <div className="relative">
                 <div className="flex flex-wrap items-center gap-2 bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl border border-gray-200 dark:border-slate-800 self-start">
                   <button
@@ -120,6 +144,7 @@ export default function ReportsPage() {
                     </div>
                   </div>
                 )}
+              </div>
               </div>
             </div>
 

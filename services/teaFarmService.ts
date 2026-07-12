@@ -54,6 +54,26 @@ export class TeaFarmService {
     return res.json();
   }
 
+  async updateExpense(id: string, data: Partial<Omit<TeaFarmExpense, 'id' | 'created_at'>>): Promise<TeaFarmExpense> {
+    const res = await fetch(`/api/tea-farm/expenses/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
+  async updateEarning(id: string, data: Partial<Omit<TeaFarmEarning, 'id' | 'created_at'>>): Promise<TeaFarmEarning> {
+    const res = await fetch(`/api/tea-farm/earnings/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
   async deleteExpense(id: string): Promise<void> {
     const res = await fetch(`/api/tea-farm/expenses/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(await res.text());

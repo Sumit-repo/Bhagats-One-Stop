@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { ProductSummary } from '@/models/Product';
 import { Package } from 'lucide-react';
 
@@ -26,6 +27,7 @@ export function TopProducts({ products = [] }: TopProductsProps) {
     <div className="bg-transparent dark:bg-transparent">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-black text-gray-900 dark:text-white">Top Sellers</h3>
+        <Link href="/inventory" className="text-xs font-black text-emerald-600 dark:text-emerald-400 hover:underline uppercase tracking-widest">View all</Link>
       </div>
 
       <div className="space-y-6">

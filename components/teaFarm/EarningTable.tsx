@@ -2,17 +2,20 @@
 
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Trash2, Leaf } from 'lucide-react';
+import { Trash2, Leaf, Pencil } from 'lucide-react';
 import { TeaFarmEarning } from '@/models/TeaFarm';
 import { TablePagination, PAGE_SIZE } from '@/components/ui/TablePagination';
+import { EditEntryModal, TeaEditTarget } from './EditEntryModal';
 
 interface EarningTableProps {
   earnings: TeaFarmEarning[];
   onDelete: (id: string) => void;
+  onEditSave: (id: string, data: Partial<Omit<TeaFarmEarning, 'id' | 'created_at'>>) => Promise<void>;
 }
 
-export function EarningTable({ earnings, onDelete }: EarningTableProps) {
+export function EarningTable({ earnings, onDelete, onEditSave }: EarningTableProps) {
   const [page, setPage] = useState(1);
+  const [editTarget, setEditTarget] = useState<TeaEditTarget | null>(null);
   const total = earnings.reduce((sum, e) => sum + e.total_amount, 0);
   const totalKg = earnings.reduce((sum, e) => sum + e.quantity_kg, 0);
   const paged = earnings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -76,13 +79,22 @@ export function EarningTable({ earnings, onDelete }: EarningTableProps) {
                     {earning.notes || <span className="text-gray-300 dark:text-slate-600 italic">—</span>}
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <button
-                      onClick={() => onDelete(earning.id)}
-                      aria-label="Delete earning"
-                      className="p-3 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => setEditTarget({ kind: 'earning', entry: earning })}
+                        aria-label="Edit earning"
+                        className="p-3 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-colors text-gray-400 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onDelete(earning.id)}
+                        aria-label="Delete earning"
+                        className="p-3 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -91,6 +103,12 @@ export function EarningTable({ earnings, onDelete }: EarningTableProps) {
         </table>
       </div>
       <TablePagination total={earnings.length} page={page} onPageChange={setPage} />
+      <EditEntryModal
+        target={editTarget}
+        onClose={() => setEditTarget(null)}
+        onSaveExpense={async () => {}}
+        onSaveEarning={onEditSave}
+      />
     </div>
   );
 }

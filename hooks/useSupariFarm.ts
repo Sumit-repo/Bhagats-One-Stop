@@ -81,6 +81,26 @@ export function useSupariFarm() {
     }
   };
 
+  const updateExpense = async (id: string, data: Partial<Omit<SupariFarmExpense, 'id' | 'created_at'>>) => {
+    try {
+      await supariFarmService.updateExpense(id, data);
+      await loadData();
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    }
+  };
+
+  const updateEarning = async (id: string, data: Partial<Omit<SupariFarmEarning, 'id' | 'created_at'>>) => {
+    try {
+      await supariFarmService.updateEarning(id, data);
+      await loadData();
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    }
+  };
+
   return {
     summary,
     expenses,
@@ -91,6 +111,8 @@ export function useSupariFarm() {
     addEntry,
     deleteExpense,
     deleteEarning,
+    updateExpense,
+    updateEarning,
     refresh: loadData,
   };
 }

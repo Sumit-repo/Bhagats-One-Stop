@@ -81,6 +81,26 @@ export function useTeaFarm() {
     }
   };
 
+  const updateExpense = async (id: string, data: Partial<Omit<TeaFarmExpense, 'id' | 'created_at'>>) => {
+    try {
+      await teaFarmService.updateExpense(id, data);
+      await loadTeaFarmData();
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    }
+  };
+
+  const updateEarning = async (id: string, data: Partial<Omit<TeaFarmEarning, 'id' | 'created_at'>>) => {
+    try {
+      await teaFarmService.updateEarning(id, data);
+      await loadTeaFarmData();
+    } catch (err) {
+      setError(err as Error);
+      throw err;
+    }
+  };
+
   return {
     summary,
     expenses,
@@ -91,6 +111,8 @@ export function useTeaFarm() {
     addEntry,
     deleteExpense,
     deleteEarning,
+    updateExpense,
+    updateEarning,
     refresh: loadTeaFarmData,
   };
 }

@@ -54,6 +54,26 @@ export class SupariFarmService {
     return res.json();
   }
 
+  async updateExpense(id: string, data: Partial<Omit<SupariFarmExpense, 'id' | 'created_at'>>): Promise<SupariFarmExpense> {
+    const res = await fetch(`/api/supari-farm/expenses/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
+  async updateEarning(id: string, data: Partial<Omit<SupariFarmEarning, 'id' | 'created_at'>>): Promise<SupariFarmEarning> {
+    const res = await fetch(`/api/supari-farm/earnings/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+  }
+
   async deleteExpense(id: string): Promise<void> {
     const res = await fetch(`/api/supari-farm/expenses/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(await res.text());

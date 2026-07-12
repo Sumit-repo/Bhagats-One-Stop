@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { Package } from 'lucide-react';
 import { Order } from '@/models/Order';
@@ -35,6 +36,7 @@ export function RecentOrders({ orders = [] }: RecentOrdersProps) {
     <div className="bg-transparent dark:bg-transparent transition-colors">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-black text-gray-900 dark:text-white">Recent Activity</h3>
+        <Link href="/orders" className="text-xs font-black text-emerald-600 dark:text-emerald-400 hover:underline uppercase tracking-widest">View all</Link>
       </div>
 
       <div className="overflow-x-auto">

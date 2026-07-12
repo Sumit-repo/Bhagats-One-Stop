@@ -83,14 +83,14 @@ function EditRow({ product, onSave, onCancel }: { product: Product; onSave: (p: 
   };
   return (
     <tr className="bg-emerald-50/50 dark:bg-emerald-500/5 border-b border-emerald-100 dark:border-emerald-500/20">
-      <td className="px-4 py-3"><input value={form.name} onChange={e => setForm(p => ({...p, name: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30" /></td>
+      <td className="px-4 py-3"><input aria-label="Product name" value={form.name} onChange={e => setForm(p => ({...p, name: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30" /></td>
       <td className="px-4 py-3">
-        <select value={form.category} onChange={e => setForm(p => ({...p, category: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none">
+        <select aria-label="Category" value={form.category} onChange={e => setForm(p => ({...p, category: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none">
           {PRODUCT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
         </select>
       </td>
-      <td className="px-4 py-3"><input type="number" value={form.stock} onChange={e => setForm(p => ({...p, stock: e.target.value}))} className="w-20 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none" /></td>
-      <td className="px-4 py-3"><input type="number" value={form.price} onChange={e => setForm(p => ({...p, price: e.target.value}))} className="w-24 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none" /></td>
+      <td className="px-4 py-3"><input aria-label="Stock quantity" type="number" value={form.stock} onChange={e => setForm(p => ({...p, stock: e.target.value}))} className="w-20 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none" /></td>
+      <td className="px-4 py-3"><input aria-label="Price" type="number" value={form.price} onChange={e => setForm(p => ({...p, price: e.target.value}))} className="w-24 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none" /></td>
       <td className="px-4 py-3 text-sm text-gray-400">—</td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center justify-end gap-2">
