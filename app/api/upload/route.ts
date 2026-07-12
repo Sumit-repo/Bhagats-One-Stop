@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { requireAuth } from '@/lib/supabase-server';
+
+const ALLOWED_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp', 'gif']);
+const ALLOWED_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
+const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 export async function POST(request: Request) {
-  if (!supabase) return NextResponse.json({ error: "Supabase not connected" }, { status: 503 });
+  const { supabase, unauthorized } = await requireAuth();
+  if (unauthorized) return unauthorized;
 
   try {
     const formData = await request.formData();
@@ -12,39 +17,41 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Generate a unique file name
-    const timestamp = Date.now();
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${timestamp}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    if (file.size > MAX_SIZE_BYTES) {
+      return NextResponse.json({ error: "File exceeds 5 MB limit" }, { status: 400 });
+    }
 
-    // Read file as ArrayBuffer
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    if (!ALLOWED_EXTENSIONS.has(ext) || !ALLOWED_MIME_TYPES.has(file.type)) {
+      return NextResponse.json({ error: "Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed." }, { status: 400 });
+    }
+
+    const timestamp = Date.now();
+    const fileName = `${timestamp}-${Math.random().toString(36).substring(7)}.${ext}`;
+
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase
+    const { error: uploadError } = await supabase!
       .storage
-      .from('media') // User must ensure this bucket exists
+      .from('media')
       .upload(fileName, buffer, {
         contentType: file.type,
-        upsert: false
+        upsert: false,
       });
 
     if (uploadError) {
-      throw uploadError;
+      return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
     }
 
-    // Get public URL
-    const { data: { publicUrl } } = supabase
+    const { data: { publicUrl } } = supabase!
       .storage
       .from('media')
       .getPublicUrl(fileName);
 
     return NextResponse.json({ url: publicUrl }, { status: 201 });
 
-  } catch (error) {
-    console.error("Upload error:", error);
-    const msg = error instanceof Error ? error.message : "Internal error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

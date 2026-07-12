@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { requireAuth } from '@/lib/supabase-server';
 import { z } from 'zod';
 
 const productSchema = z.object({
@@ -11,16 +11,16 @@ const productSchema = z.object({
 });
 
 export async function GET() {
-  if (!supabase) return NextResponse.json({ error: "Supabase not connected" }, { status: 503 });
-  
-  const { data, error } = await supabase
+  const { supabase, unauthorized } = await requireAuth();
+  if (unauthorized) return unauthorized;
+
+  const { data, error } = await supabase!
     .from('products')
     .select('*')
     .order('created_at', { ascending: false });
-    
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Compute `sales` field from price * quantity_sold (not stored in DB)
+  if (error) return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+
   const enriched = (data || []).map((p: any) => ({
     ...p,
     sales: Number(p.price) * Number(p.quantity_sold),
@@ -30,31 +30,26 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!supabase) return NextResponse.json({ error: "Supabase not connected" }, { status: 503 });
-  
+  const { supabase, unauthorized } = await requireAuth();
+  if (unauthorized) return unauthorized;
+
   try {
     const body = await request.json();
     const validatedData = productSchema.parse(body);
-    
-    const newProduct = {
-      ...validatedData,
-      quantity_sold: 0,
-    };
-    
-    const { data, error } = await supabase
+
+    const { data, error } = await supabase!
       .from('products')
-      .insert([newProduct])
+      .insert([{ ...validatedData, quantity_sold: 0 }])
       .select()
       .single();
-      
+
     if (error) throw error;
-    
+
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Validation failed", details: error.errors }, { status: 400 });
     }
-    const msg = error instanceof Error ? error.message : "Internal error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
