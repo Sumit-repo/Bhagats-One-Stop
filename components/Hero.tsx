@@ -60,6 +60,10 @@ export function Hero() {
               <img
                 src={slide.image}
                 alt={slide.title}
+                width={1000}
+                height={500}
+                loading={slide.id === 1 ? 'eager' : 'lazy'}
+                fetchPriority={slide.id === 1 ? 'high' : 'auto'}
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 ${activeSlide === slide.id ? 'opacity-100' : 'opacity-60'

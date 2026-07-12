@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /orders
+Disallow: /inventory
+Disallow: /customers
+Disallow: /reports
+Disallow: /settings
+Disallow: /tea-farm
+Disallow: /supari-farm
+Disallow: /api/
+
+# Allow AI search and citation bots explicitly
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://bhagatsonestop.com/sitemap.xml

@@ -2,11 +2,13 @@
 
 export const siteMeta = {
   title: "Bhagat's One-Stop — Digital Services & General Store",
-  description: "Your neighborhood hub for digital services, banking, and a full range of daily essentials.",
+  description: "Your neighborhood hub in Kishanganj for digital services, banking, and a full range of daily essentials.",
   heroSubtitle: "Trust in every touch, variety in every aisle.",
   legacyTitle: "Built on Trust, Grown by Community",
-  contactTitle: "Visit Us Today or Order from Home",
-  phone: "919122244192",
+  contactTitle: "Visit Us in Kishanganj or Order from Home",
+  phone: "917004211630",
+  city: "Kishanganj",
+  state: "Bihar",
   mapUrl: "https://maps.app.goo.gl/3ugWFGWYusQPKEr9A"
 };
 

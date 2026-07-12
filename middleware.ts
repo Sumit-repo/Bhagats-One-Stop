@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 // Routes that do NOT require authentication
 const PUBLIC_PATHS = ['/', '/login'];
+// Prefix-matched public routes (any sub-path is also public)
+const PUBLIC_PREFIXES = ['/about', '/contact', '/shop', '/services'];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request: { headers: request.headers } });
@@ -47,7 +49,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // If not logged in and hitting a protected route → redirect to login
-  const isPublic = PUBLIC_PATHS.includes(pathname);
+  const isPublic =
+    PUBLIC_PATHS.includes(pathname) ||
+    PUBLIC_PREFIXES.some(p => pathname === p || pathname.startsWith(p + '/'));
   if (!session && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
