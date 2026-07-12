@@ -47,9 +47,27 @@ export async function POST(request: Request) {
       .insert([{ ...validatedData, order_number }])
       .select()
       .single();
-      
+
     if (error) throw error;
-    
+
+    // Best-effort: decrement stock for matching product
+    const { data: product } = await supabase
+      .from('products')
+      .select('id, stock, quantity_sold')
+      .ilike('name', validatedData.product_name)
+      .limit(1)
+      .single();
+
+    if (product && product.stock > 0) {
+      await supabase
+        .from('products')
+        .update({
+          stock: product.stock - 1,
+          quantity_sold: (product.quantity_sold || 0) + 1,
+        })
+        .eq('id', product.id);
+    }
+
     return NextResponse.json(data, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

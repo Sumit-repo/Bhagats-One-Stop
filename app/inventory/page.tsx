@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardShell } from '@/components/layout/DashboardShell';
 import { ProductTable } from '@/components/inventory/ProductTable';
 import { AddProductModal } from '@/components/inventory/AddProductModal';
 import { useProducts } from '@/hooks/useProducts';
@@ -13,21 +13,19 @@ export default function InventoryPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
-        <Sidebar />
+      <DashboardShell>
         <div className="flex-1 p-6">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 dark:bg-slate-800 rounded w-1/4"></div>
             <div className="h-96 bg-gray-200 dark:bg-slate-800 rounded"></div>
           </div>
         </div>
-      </div>
+      </DashboardShell>
     );
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
-      <Sidebar />
+    <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-10">
           <div className="max-w-7xl mx-auto">
@@ -62,11 +60,11 @@ export default function InventoryPage() {
         </main>
       </div>
 
-      <AddProductModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onAdd={addProduct} 
+      <AddProductModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={addProduct}
       />
-    </div>
+    </DashboardShell>
   );
 }

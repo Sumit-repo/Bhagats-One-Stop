@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardShell } from '@/components/layout/DashboardShell';
 import { SalesChart } from '@/components/dashboard/SalesChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
 import { useDashboard } from '@/hooks/useDashboard';
@@ -36,21 +36,19 @@ export default function ReportsPage() {
 
   if (loading && !stats) { 
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
-        <Sidebar />
+      <DashboardShell>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
             <p className="mt-4 text-gray-600 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Generating Analytics Reports...</p>
           </div>
         </div>
-      </div>
+      </DashboardShell>
     );
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
-      <Sidebar />
+    <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
           <div className="max-w-7xl mx-auto uppercase-header-context">
@@ -157,14 +155,13 @@ export default function ReportsPage() {
               {(() => {
                 const revenue = stats?.total_revenue || 0;
                 const orders = stats?.total_orders || 0;
-                const netProfit = revenue * 0.4;
                 const avgTicket = orders > 0 ? revenue / orders : 0;
                 return [
                   {
-                    label: 'Net Profit',
-                    value: `₹${netProfit.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`,
+                    label: 'Total Revenue',
+                    value: `₹${revenue.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`,
                     trend: stats?.revenue_change != null ? `${stats.revenue_change >= 0 ? '+' : ''}${stats.revenue_change}%` : null,
-                    sub: '~40% margin estimate',
+                    sub: 'Gross sales for period',
                   },
                   {
                     label: 'Avg Ticket',
@@ -201,6 +198,6 @@ export default function ReportsPage() {
           </div>
         </main>
       </div>
-    </div>
+    </DashboardShell>
   );
 }

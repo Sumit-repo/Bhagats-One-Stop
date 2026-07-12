@@ -5,6 +5,7 @@ import { Search, Package, ArrowUpDown, ArrowUp, ArrowDown, Pencil, Trash2, Check
 import { CustomDropdown } from '@/components/ui/CustomDropdown';
 import { Product } from '@/models/Product';
 import { PRODUCT_CATEGORIES, LOW_STOCK_THRESHOLD } from '@/lib/constants';
+import { TablePagination, PAGE_SIZE } from '@/components/ui/TablePagination';
 
 type SortKey = 'name' | 'category' | 'stock' | 'price' | 'sales';
 type SortDir = 'asc' | 'desc';
@@ -107,13 +108,15 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
   const [sortKey, setSortKey] = useState<SortKey>('name');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [page, setPage] = useState(1);
 
-  const handleSearch = (val: string) => { setSearch(val); onFilter({ search: val, category }); };
-  const handleCategoryChange = (val: string) => { setCategory(val); onFilter({ search, category: val }); };
+  const handleSearch = (val: string) => { setSearch(val); onFilter({ search: val, category }); setPage(1); };
+  const handleCategoryChange = (val: string) => { setCategory(val); onFilter({ search, category: val }); setPage(1); };
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
     else { setSortKey(key); setSortDir('asc'); }
+    setPage(1);
   };
 
   const sorted = useMemo(() => {
@@ -137,6 +140,7 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
     setEditingProduct(null);
   };
 
+  const paged = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const thClass = "px-6 py-5 cursor-pointer select-none hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors";
 
   return (
@@ -169,7 +173,7 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-              {sorted.length > 0 ? sorted.map((product) =>
+              {paged.length > 0 ? paged.map((product) =>
                 editingProduct?.id === product.id ? (
                   <EditRow key={product.id} product={product} onSave={handleEditSave} onCancel={() => setEditingProduct(null)} />
                 ) : (
@@ -209,6 +213,7 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
             </tbody>
           </table>
         </div>
+        <TablePagination total={sorted.length} page={page} onPageChange={setPage} />
       </div>
     </div>
   );

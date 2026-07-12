@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, User, ArrowUpDown, ArrowUp, ArrowDown, Pencil, Trash2, Check, X } from 'lucide-react';
 import { CustomDropdown } from '@/components/ui/CustomDropdown';
 import { Order, OrderStatus } from '@/models/Order';
+import { TablePagination, PAGE_SIZE } from '@/components/ui/TablePagination';
 
 type SortKey = 'order_number' | 'customer_name' | 'order_date' | 'status' | 'price';
 type SortDir = 'asc' | 'desc';
@@ -106,13 +107,15 @@ export function OrderTable({ orders, onFilter, onDelete, onUpdateStatus }: Order
   const [status, setStatus] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('order_date');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [page, setPage] = useState(1);
 
-  const handleSearch = (val: string) => { setSearch(val); onFilter({ search: val, status }); };
-  const handleStatusChange = (val: string) => { setStatus(val); onFilter({ search, status: val }); };
+  const handleSearch = (val: string) => { setSearch(val); onFilter({ search: val, status }); setPage(1); };
+  const handleStatusChange = (val: string) => { setStatus(val); onFilter({ search, status: val }); setPage(1); };
 
   const toggleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
     else { setSortKey(key); setSortDir('asc'); }
+    setPage(1);
   };
 
   const sorted = useMemo(() => {
@@ -131,6 +134,7 @@ export function OrderTable({ orders, onFilter, onDelete, onUpdateStatus }: Order
     });
   }, [orders, sortKey, sortDir]);
 
+  const paged = sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const thClass = "px-6 py-5 cursor-pointer select-none hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors";
 
   return (
@@ -161,7 +165,7 @@ export function OrderTable({ orders, onFilter, onDelete, onUpdateStatus }: Order
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-              {sorted.length > 0 ? sorted.map((order) => (
+              {paged.length > 0 ? paged.map((order) => (
                 <tr key={order.id} className="group hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
                   <td className="px-6 py-5 text-sm font-bold text-gray-400 dark:text-slate-600 font-mono">#{order.order_number}</td>
                   <td className="px-6 py-5">
@@ -190,6 +194,7 @@ export function OrderTable({ orders, onFilter, onDelete, onUpdateStatus }: Order
             </tbody>
           </table>
         </div>
+        <TablePagination total={sorted.length} page={page} onPageChange={setPage} />
       </div>
     </div>
   );

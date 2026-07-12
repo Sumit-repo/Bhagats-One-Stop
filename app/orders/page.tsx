@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardShell } from '@/components/layout/DashboardShell';
 import { OrderTable } from '@/components/orders/OrderTable';
 import { AddOrderModal } from '@/components/orders/AddOrderModal';
 import { useOrders } from '@/hooks/useOrders';
@@ -13,21 +13,19 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-gray-50 dark:bg-slate-950">
-        <Sidebar />
+      <DashboardShell>
         <div className="flex-1 p-6">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 dark:bg-slate-800 rounded w-1/4"></div>
             <div className="h-64 bg-gray-200 dark:bg-slate-800 rounded"></div>
           </div>
         </div>
-      </div>
+      </DashboardShell>
     );
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
-      <Sidebar />
+    <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-10">
           <div className="max-w-7xl mx-auto">
@@ -41,7 +39,7 @@ export default function OrdersPage() {
                 </h1>
                 <p className="text-gray-500 dark:text-slate-400 mt-2 font-medium">Transaction lifecycle at Bhagat&apos;s One-Stop</p>
               </div>
-              <button 
+              <button
                 onClick={() => setIsModalOpen(true)}
                 className="flex items-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-[2rem] font-black text-lg hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200 dark:shadow-none hover:scale-[1.02] active:scale-95"
               >
@@ -50,8 +48,8 @@ export default function OrdersPage() {
               </button>
             </div>
 
-            <OrderTable 
-              orders={orders} 
+            <OrderTable
+              orders={orders}
               onFilter={applyFilters}
               onDelete={deleteOrder}
               onUpdateStatus={updateOrderStatus}
@@ -60,11 +58,11 @@ export default function OrdersPage() {
         </main>
       </div>
 
-      <AddOrderModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onAdd={addOrder} 
+      <AddOrderModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={addOrder}
       />
-    </div>
+    </DashboardShell>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DollarSign, TrendingUp, TrendingDown, Wallet, Plus } from 'lucide-react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardShell } from '@/components/layout/DashboardShell';
 import { SummaryCard } from '@/components/teaFarm/SummaryCard';
 import { ProfitChart } from '@/components/teaFarm/ProfitChart';
 import { ExpenseTable } from '@/components/supariFarm/ExpenseTable';
@@ -16,15 +16,14 @@ export default function SupariFarmPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-white dark:bg-slate-950">
-        <Sidebar />
+      <DashboardShell>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
             <p className="mt-4 text-gray-600 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Loading supari farm data...</p>
           </div>
         </div>
-      </div>
+      </DashboardShell>
     );
   }
 
@@ -32,8 +31,7 @@ export default function SupariFarmPage() {
   const isProfitable = profitLoss >= 0;
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
-      <Sidebar />
+    <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-y-auto">
           <div className="p-8">
@@ -124,6 +122,6 @@ export default function SupariFarmPage() {
         onClose={() => setIsModalOpen(false)}
         onSubmit={addEntry}
       />
-    </div>
+    </DashboardShell>
   );
 }

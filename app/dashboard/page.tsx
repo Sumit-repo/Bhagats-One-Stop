@@ -1,7 +1,7 @@
 'use client';
 
 import { DollarSign, ShoppingCart, Package, Users } from 'lucide-react';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardShell } from '@/components/layout/DashboardShell';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { SalesChart } from '@/components/dashboard/SalesChart';
 import { CategoryChart } from '@/components/dashboard/CategoryChart';
@@ -20,15 +20,14 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-white dark:bg-slate-950">
-        <Sidebar />
+      <DashboardShell>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto"></div>
             <p className="mt-4 text-gray-600 dark:text-slate-400 font-bold uppercase tracking-widest text-xs">Initializing Dashboard...</p>
           </div>
         </div>
-      </div>
+      </DashboardShell>
     );
   }
 
@@ -43,8 +42,7 @@ export default function DashboardPage() {
   const recentOrdersLimit = orders.slice(0, 5);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
-      <Sidebar />
+    <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-y-auto p-4 lg:p-10">
           <div className="max-w-7xl mx-auto">
@@ -114,6 +112,6 @@ export default function DashboardPage() {
           </div>
         </main>
       </div>
-    </div>
+    </DashboardShell>
   );
 }
