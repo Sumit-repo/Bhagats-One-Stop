@@ -41,7 +41,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-dvh flex">
+    <div className="h-full flex">
       {/* ── Left brand panel (desktop only) ── */}
       <div className="hidden lg:flex lg:w-[45%] bg-emerald-700 flex-col justify-between p-12 relative overflow-hidden">
         {/* Subtle pattern */}
@@ -97,8 +97,8 @@ export default function LoginPage() {
       </div>
 
       {/* ── Right form panel ── */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-slate-950 px-6 py-12">
-        <div className="w-full max-w-sm">
+      <div className="flex-1 flex flex-col items-center justify-center bg-white dark:bg-slate-950 px-8 sm:px-12 py-12">
+        <div className="w-full max-w-md">
           {/* Mobile logo (hidden on desktop) */}
           <div className="lg:hidden flex justify-center mb-10">
             <img

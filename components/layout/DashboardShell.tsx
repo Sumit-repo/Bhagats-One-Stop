@@ -9,7 +9,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-dvh bg-gray-50 dark:bg-slate-950 transition-colors">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
@@ -20,15 +20,15 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       {/* Sidebar: fixed overlay on mobile, static on desktop */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out md:relative md:z-auto md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 ease-in-out md:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
 
-      {/* Content area */}
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+      {/* Content area — offset by sidebar width on desktop */}
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0 md:pl-64">
         {/* Mobile top bar */}
         <div className="md:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 shrink-0">
           <button
