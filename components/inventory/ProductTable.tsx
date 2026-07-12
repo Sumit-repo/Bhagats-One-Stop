@@ -4,6 +4,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, Package, ArrowUpDown, ArrowUp, ArrowDown, Pencil, Trash2, Check, X } from 'lucide-react';
 import { CustomDropdown } from '@/components/ui/CustomDropdown';
 import { Product } from '@/models/Product';
+import { PRODUCT_CATEGORIES, LOW_STOCK_THRESHOLD } from '@/lib/constants';
 
 type SortKey = 'name' | 'category' | 'stock' | 'price' | 'sales';
 type SortDir = 'asc' | 'desc';
@@ -84,7 +85,7 @@ function EditRow({ product, onSave, onCancel }: { product: Product; onSave: (p: 
       <td className="px-4 py-3"><input value={form.name} onChange={e => setForm(p => ({...p, name: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/30" /></td>
       <td className="px-4 py-3">
         <select value={form.category} onChange={e => setForm(p => ({...p, category: e.target.value}))} className="w-full px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none">
-          {['Dairy','Bakery','General','Snacks'].map(c => <option key={c}>{c}</option>)}
+          {PRODUCT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
         </select>
       </td>
       <td className="px-4 py-3"><input type="number" value={form.stock} onChange={e => setForm(p => ({...p, stock: e.target.value}))} className="w-20 px-3 py-1.5 text-sm rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 dark:text-white focus:outline-none" /></td>
@@ -148,7 +149,8 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
           <span className="text-xs font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest hidden md:block">Filter by:</span>
-          <CustomDropdown options={[{ label: 'All Categories', value: '' },{ label: 'Dairy', value: 'Dairy' },{ label: 'Bakery', value: 'Bakery' },{ label: 'General', value: 'General' },{ label: 'Snacks', value: 'Snacks' }]}
+          <CustomDropdown options={[{ label: 'All Categories', value: '' }, ...PRODUCT_CATEGORIES.map(c => ({ label: c, value: c }))]}
+
             value={category} onChange={handleCategoryChange} className="w-full md:w-auto" />
         </div>
       </div>
@@ -183,9 +185,9 @@ export function ProductTable({ products, onFilter, onDelete, onEdit }: ProductTa
                     <td className="px-6 py-5"><span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase rounded-lg">{product.category}</span></td>
                     <td className="px-6 py-5">
                       <div className="flex flex-col gap-1">
-                        <span className={`text-sm font-bold ${product.stock < 20 ? 'text-red-500' : 'text-gray-900 dark:text-white'}`}>{product.stock} units</span>
+                        <span className={`text-sm font-bold ${product.stock < LOW_STOCK_THRESHOLD ? 'text-red-500' : 'text-gray-900 dark:text-white'}`}>{product.stock} units</span>
                         <div className="w-20 h-1 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                          <div className={`h-full ${product.stock < 20 ? 'bg-red-500' : 'bg-emerald-500'}`} style={{ width: `${Math.min((product.stock / 200) * 100, 100)}%` }} />
+                          <div className={`h-full ${product.stock < LOW_STOCK_THRESHOLD ? 'bg-red-500' : 'bg-emerald-500'}`} style={{ width: `${Math.min((product.stock / 200) * 100, 100)}%` }} />
                         </div>
                       </div>
                     </td>

@@ -12,32 +12,51 @@ export class DashboardService {
     const products: any[] = productsRes.ok ? await productsRes.json() : [];
     const customers: any[] = customersRes.ok ? await customersRes.json() : [];
 
-    let orders = [];
+    let orders: any[] = [];
+    let prevOrders: any[] = [];
+
     if (customRange && customRange.start && customRange.end) {
-      const startDate = new Date(customRange.start).getTime();
-      const endDate = new Date(customRange.end);
-      endDate.setHours(23, 59, 59, 999);
+      const start = new Date(customRange.start).getTime();
+      const end = new Date(customRange.end);
+      end.setHours(23, 59, 59, 999);
+      const endMs = end.getTime();
+      const periodMs = endMs - start;
+
       orders = allOrders.filter(o => {
-        const time = new Date(o.order_date).getTime();
-        return time >= startDate && time <= endDate.getTime();
+        const t = new Date(o.order_date).getTime();
+        return t >= start && t <= endMs;
+      });
+      prevOrders = allOrders.filter(o => {
+        const t = new Date(o.order_date).getTime();
+        return t >= start - periodMs && t < start;
       });
     } else {
-      const cutoff = new Date();
-      cutoff.setDate(cutoff.getDate() - days);
-      orders = allOrders.filter(o => new Date(o.order_date) >= cutoff);
+      const now = Date.now();
+      const cutoffMs = now - days * 86400000;
+      const prevCutoffMs = cutoffMs - days * 86400000;
+
+      orders = allOrders.filter(o => new Date(o.order_date).getTime() >= cutoffMs);
+      prevOrders = allOrders.filter(o => {
+        const t = new Date(o.order_date).getTime();
+        return t >= prevCutoffMs && t < cutoffMs;
+      });
     }
 
+    const pct = (curr: number, prev: number) =>
+      prev > 0 ? Math.round(((curr - prev) / prev) * 100 * 10) / 10 : 0;
+
     const totalRevenue = orders.reduce((sum, o) => sum + Number(o.price), 0);
+    const prevRevenue = prevOrders.reduce((sum, o) => sum + Number(o.price), 0);
 
     return {
       total_revenue: totalRevenue,
-      revenue_change: days === 7 ? 4.2 : 18.2, // Mocked percentage logic
+      revenue_change: pct(totalRevenue, prevRevenue),
       total_orders: orders.length,
-      orders_change: days === 7 ? 2.5 : 12.5,
+      orders_change: pct(orders.length, prevOrders.length),
       total_products: products.length,
-      products_change: -2.3,
+      products_change: 0,
       active_customers: customers.length,
-      customers_change: days === 7 ? 5.1 : 24.6,
+      customers_change: 0,
     };
   }
 

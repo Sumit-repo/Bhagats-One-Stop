@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Package, Trash2, Plus, Upload } from 'lucide-react';
+import { X, Package, Upload } from 'lucide-react';
+import { PRODUCT_CATEGORIES } from '@/lib/constants';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -122,10 +123,7 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
                 onChange={e => setFormData({...formData, category: e.target.value})}
                 className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-800 border-none rounded-xl text-sm font-bold dark:text-white focus:ring-2 focus:ring-emerald-500/20"
               >
-                <option>Dairy</option>
-                <option>Bakery</option>
-                <option>General</option>
-                <option>Snacks</option>
+                {PRODUCT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div>

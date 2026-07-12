@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { Filter } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Order } from '@/models/Order';
 
 interface RecentOrdersProps {
@@ -17,11 +17,19 @@ const statusColors = {
 };
 
 export function RecentOrders({ orders = [] }: RecentOrdersProps) {
-  const displayOrders = orders && orders.length > 0 ? orders : [
-    { id: '1', order_number: 1001, product_name: 'Fresh Dairy', customer_name: 'M-Starlight', status: 'delivered', price: 145.80, order_date: '2024-05-05' },
-    { id: '2', order_number: 1002, product_name: 'Vegetables', customer_name: 'Serene W', status: 'delivered', price: 210.30, order_date: '2024-05-04' },
-    { id: '3', order_number: 1003, product_name: 'Range Eggs', customer_name: 'James D', status: 'delivered', price: 298.40, order_date: '2024-05-03' },
-  ];
+  if (orders.length === 0) {
+    return (
+      <div className="bg-transparent dark:bg-transparent transition-colors">
+        <h3 className="text-xl font-black text-gray-900 dark:text-white mb-8">Recent Activity</h3>
+        <div className="flex flex-col items-center justify-center py-14 text-center">
+          <div className="w-14 h-14 bg-gray-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4">
+            <Package className="w-7 h-7 text-gray-400 dark:text-slate-500" />
+          </div>
+          <p className="text-sm text-gray-400 dark:text-slate-500 font-medium">No orders yet</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-transparent dark:bg-transparent transition-colors">
@@ -41,13 +49,13 @@ export function RecentOrders({ orders = [] }: RecentOrdersProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-            {displayOrders.map((order) => (
+            {orders.map((order) => (
               <tr key={order.id || order.order_number} className="group hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
                 <td className="py-5 px-2 text-sm font-bold text-gray-400 dark:text-slate-600 font-mono">#{order.order_number}</td>
                 <td className="py-5 px-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-lg transition-transform group-hover:scale-110">
-                      📦
+                    <div className="w-10 h-10 bg-gray-100 dark:bg-slate-800 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110">
+                      <Package className="w-5 h-5 text-gray-500 dark:text-slate-400" />
                     </div>
                     <div>
                       <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">{order.customer_name}</p>

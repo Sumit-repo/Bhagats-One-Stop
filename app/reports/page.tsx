@@ -134,7 +134,7 @@ export default function ReportsPage() {
                   </div>
                   <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-black rounded-xl uppercase tracking-wider">
                     <ArrowUpRight className="w-3 h-3" />
-                    {stats?.revenue_change}%
+                    {stats?.revenue_change ?? 0}%
                   </div>
                 </div>
                 <div className="h-[350px] w-full">
@@ -154,17 +154,45 @@ export default function ReportsPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { label: 'Net Profit', value: `₹${(stats?.total_revenue || 0 * 0.4).toLocaleString()}`, trend: '+8.4%', sub: 'Estimated margin' },
-                { label: 'Avg Ticket', value: '₹842', trend: '+2.1%', sub: 'Per customer spend' },
-                { label: 'Retain Rate', value: '72%', trend: '+12%', sub: 'Returning customers' },
-                { label: 'Conversion', value: '4.8%', trend: '-0.4%', sub: 'Traffic to orders' },
-              ].map((metric, i) => (
+              {(() => {
+                const revenue = stats?.total_revenue || 0;
+                const orders = stats?.total_orders || 0;
+                const netProfit = revenue * 0.4;
+                const avgTicket = orders > 0 ? revenue / orders : 0;
+                return [
+                  {
+                    label: 'Net Profit',
+                    value: `₹${netProfit.toLocaleString('en-IN', { maximumFractionDigits: 0 })}`,
+                    trend: stats?.revenue_change != null ? `${stats.revenue_change >= 0 ? '+' : ''}${stats.revenue_change}%` : null,
+                    sub: '~40% margin estimate',
+                  },
+                  {
+                    label: 'Avg Ticket',
+                    value: orders > 0 ? `₹${avgTicket.toLocaleString('en-IN', { maximumFractionDigits: 0 })}` : '—',
+                    trend: stats?.orders_change != null ? `${stats.orders_change >= 0 ? '+' : ''}${stats.orders_change}%` : null,
+                    sub: 'Revenue ÷ orders',
+                  },
+                  {
+                    label: 'Total Orders',
+                    value: orders.toLocaleString(),
+                    trend: stats?.orders_change != null ? `${stats.orders_change >= 0 ? '+' : ''}${stats.orders_change}%` : null,
+                    sub: 'In selected period',
+                  },
+                  {
+                    label: 'Customers',
+                    value: (stats?.active_customers || 0).toLocaleString(),
+                    trend: null,
+                    sub: 'Total registered',
+                  },
+                ];
+              })().map((metric, i) => (
                 <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm transition-all hover:border-emerald-200 dark:hover:border-emerald-500/30">
                   <p className="text-xs text-gray-400 dark:text-slate-500 font-black uppercase tracking-widest mb-3">{metric.label}</p>
                   <p className="text-3xl font-black text-gray-900 dark:text-white mb-2">{metric.value}</p>
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs font-bold ${metric.trend.startsWith('+') ? 'text-emerald-600' : 'text-red-500'}`}>{metric.trend}</span>
+                    {metric.trend && (
+                      <span className={`text-xs font-bold ${metric.trend.startsWith('+') ? 'text-emerald-600' : 'text-red-500'}`}>{metric.trend}</span>
+                    )}
                     <span className="text-xs text-gray-400 dark:text-slate-500 font-medium">{metric.sub}</span>
                   </div>
                 </div>

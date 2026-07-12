@@ -14,7 +14,7 @@ export class OrderService {
     return data.slice(0, limit);
   }
 
-  async createOrder(order: Omit<Order, 'id' | 'created_at'>): Promise<Order> {
+  async createOrder(order: Omit<Order, 'id' | 'created_at' | 'order_number'>): Promise<Order> {
     const res = await fetch('/api/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

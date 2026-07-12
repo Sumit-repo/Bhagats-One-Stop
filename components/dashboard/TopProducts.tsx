@@ -1,42 +1,38 @@
 'use client';
 
 import { ProductSummary } from '@/models/Product';
-import { CustomDropdown } from '@/components/ui/CustomDropdown';
-import { useState } from 'react';
+import { Package } from 'lucide-react';
 
 interface TopProductsProps {
   products?: ProductSummary[];
 }
 
 export function TopProducts({ products = [] }: TopProductsProps) {
-  const [period, setPeriod] = useState('monthly');
-  
-  const displayProducts = products && products.length > 0 ? products : [
-    { id: '1', name: 'Fresh Milk', price: 684.00, quantity_sold: 342 },
-    { id: '2', name: 'Wheat Bread', price: 512.00, quantity_sold: 256 },
-    { id: '3', name: 'Emerald Velvet', price: 355.90, quantity_sold: 189 },
-  ];
+  if (products.length === 0) {
+    return (
+      <div className="bg-transparent dark:bg-transparent">
+        <h3 className="text-xl font-black text-gray-900 dark:text-white mb-8">Top Sellers</h3>
+        <div className="flex flex-col items-center justify-center py-14 text-center">
+          <div className="w-14 h-14 bg-gray-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-4">
+            <Package className="w-7 h-7 text-gray-400 dark:text-slate-500" />
+          </div>
+          <p className="text-sm text-gray-400 dark:text-slate-500 font-medium">No products yet</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-transparent dark:bg-transparent">
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-xl font-black text-gray-900 dark:text-white">Top Sellers</h3>
-        <CustomDropdown
-          options={[
-            { label: 'Monthly', value: 'monthly' },
-            { label: 'Weekly', value: 'weekly' },
-            { label: 'Yearly', value: 'yearly' },
-          ]}
-          value={period}
-          onChange={setPeriod}
-        />
       </div>
 
       <div className="space-y-6">
-        {displayProducts.map((product) => (
+        {products.map((product) => (
           <div key={product.id} className="flex items-center gap-4 group cursor-pointer">
             <div className="w-14 h-14 bg-gray-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-105 border border-transparent group-hover:border-emerald-500/10">
-              <span className="text-xl">📦</span>
+              <Package className="w-6 h-6 text-gray-400 dark:text-slate-500" />
             </div>
             <div className="flex-1">
               <p className="font-bold text-gray-900 dark:text-white mb-0.5 transition-colors group-hover:text-emerald-600 dark:group-hover:text-emerald-400">{product.name}</p>

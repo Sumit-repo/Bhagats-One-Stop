@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { X, Receipt, Sprout, Info, Calendar as CalendarIcon, Package, DollarSign } from 'lucide-react';
 import { SupariFinanceEntry, SupariExpenseCategory } from '@/models/SupariFarm';
+import { localDateString } from '@/lib/constants';
 
 interface AddEntryModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ export function AddEntryModal({ isOpen, onClose, onSubmit }: AddEntryModalProps)
   const [amount, setAmount] = useState('');
   const [quantityKg, setQuantityKg] = useState('');
   const [pricePerKg, setPricePerKg] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(localDateString);
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +55,7 @@ export function AddEntryModal({ isOpen, onClose, onSubmit }: AddEntryModalProps)
     setAmount('');
     setQuantityKg('');
     setPricePerKg('');
-    setDate(new Date().toISOString().split('T')[0]);
+    setDate(localDateString());
     setNotes('');
   };
 

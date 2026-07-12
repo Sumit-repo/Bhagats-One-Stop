@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { z } from 'zod';
 
 const orderSchema = z.object({
-  order_number: z.number().min(1, "Order number is required"),
+  order_number: z.number().min(1).optional(),
   product_name: z.string().min(1, "Product name is required"),
   customer_name: z.string().min(1, "Customer name is required"),
   status: z.enum(['pending', 'processing', 'shipped', 'delivered']).default('pending'),
@@ -29,10 +29,22 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validatedData = orderSchema.parse(body);
-    
+
+    // Auto-generate order_number if not provided
+    let order_number = validatedData.order_number;
+    if (!order_number) {
+      const { data: maxRow } = await supabase
+        .from('orders')
+        .select('order_number')
+        .order('order_number', { ascending: false })
+        .limit(1)
+        .single();
+      order_number = (maxRow?.order_number ?? 1000) + 1;
+    }
+
     const { data, error } = await supabase
       .from('orders')
-      .insert([validatedData])
+      .insert([{ ...validatedData, order_number }])
       .select()
       .single();
       

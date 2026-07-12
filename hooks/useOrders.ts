@@ -37,7 +37,7 @@ export function useOrders() {
     setFilteredOrders(result);
   };
 
-  const addOrder = async (newOrder: Omit<Order, 'id' | 'created_at'>) => {
+  const addOrder = async (newOrder: Omit<Order, 'id' | 'created_at' | 'order_number'>) => {
     const created = await orderService.createOrder(newOrder);
     setOrders(prev => [created, ...prev]);
     setFilteredOrders(prev => [created, ...prev]);
