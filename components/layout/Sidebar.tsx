@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, ShoppingCart, Package, Users, ChartBar as BarChart3, LogOut, Leaf } from 'lucide-react';
+import { LayoutDashboard, ShoppingCart, Package, Users, ChartBar as BarChart3, LogOut, Leaf, Sprout } from 'lucide-react';
 import { createBrowserClient } from '@supabase/ssr';
 import { useState } from 'react';
 
@@ -16,6 +16,7 @@ const menuItems = [
 
 const otherItems = [
   { icon: Leaf, label: 'Tea Farm', href: '/tea-farm' },
+  { icon: Sprout, label: 'Supari Farm', href: '/supari-farm' },
 ];
 
 export function Sidebar() {
