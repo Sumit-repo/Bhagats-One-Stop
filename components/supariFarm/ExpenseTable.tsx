@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Trash2, Receipt } from 'lucide-react';
 import { SupariFarmExpense } from '@/models/SupariFarm';
+import { TablePagination, PAGE_SIZE } from '@/components/ui/TablePagination';
 
 interface ExpenseTableProps {
   expenses: SupariFarmExpense[];
@@ -28,7 +30,9 @@ const categoryLabel: Record<string, string> = {
 };
 
 export function ExpenseTable({ expenses, onDelete }: ExpenseTableProps) {
+  const [page, setPage] = useState(1);
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const paged = expenses.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
@@ -60,14 +64,14 @@ export function ExpenseTable({ expenses, onDelete }: ExpenseTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-            {expenses.length === 0 ? (
+            {paged.length === 0 ? (
               <tr>
                 <td colSpan={5} className="py-14 text-center text-gray-400 dark:text-slate-500 font-medium italic text-sm">
                   No expenses recorded yet. Add an entry to get started.
                 </td>
               </tr>
             ) : (
-              expenses.map((expense) => (
+              paged.map((expense) => (
                 <tr key={expense.id} className="group hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
                   <td className="px-5 py-4 text-sm font-mono font-medium text-gray-500 dark:text-slate-400 italic">
                     {format(new Date(expense.date), 'dd MMM yy')}
@@ -86,7 +90,8 @@ export function ExpenseTable({ expenses, onDelete }: ExpenseTableProps) {
                   <td className="px-5 py-4 text-right">
                     <button
                       onClick={() => onDelete(expense.id)}
-                      className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100"
+                      aria-label="Delete expense"
+                      className="p-3 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -97,6 +102,7 @@ export function ExpenseTable({ expenses, onDelete }: ExpenseTableProps) {
           </tbody>
         </table>
       </div>
+      <TablePagination total={expenses.length} page={page} onPageChange={setPage} />
     </div>
   );
 }

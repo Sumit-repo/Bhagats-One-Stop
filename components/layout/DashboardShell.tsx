@@ -9,7 +9,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-slate-950 transition-colors">
+    <div className="flex min-h-dvh bg-gray-50 dark:bg-slate-950 transition-colors">
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
@@ -33,8 +33,9 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <div className="md:hidden flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-xl text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-3 rounded-xl text-gray-500 hover:text-gray-900 dark:text-slate-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Open menu"
+            aria-expanded={sidebarOpen}
           >
             <Menu className="w-5 h-5" />
           </button>

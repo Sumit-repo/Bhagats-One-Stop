@@ -51,7 +51,7 @@ export default function DashboardPage() {
               <p className="text-gray-500 dark:text-slate-400 font-medium mt-1">Real-time performance at Bhagat&apos;s One-Stop</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-10">
               <StatCard
                 icon={DollarSign}
                 title="Total Revenue"

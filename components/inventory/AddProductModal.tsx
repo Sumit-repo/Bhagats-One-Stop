@@ -64,7 +64,7 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-800 p-8 transform animate-in slide-in-from-bottom-8 duration-500">
+      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-800 p-8 transform animate-in slide-in-from-bottom-8 duration-500 max-h-[90dvh] overflow-y-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
@@ -72,9 +72,10 @@ export function AddProductModal({ isOpen, onClose, onAdd }: AddProductModalProps
             </div>
             <h2 className="text-2xl font-black text-gray-900 dark:text-white">Add Product</h2>
           </div>
-          <button 
+          <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            aria-label="Close"
+            className="p-3 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
           >
             <X className="w-6 h-6 text-gray-400" />
           </button>

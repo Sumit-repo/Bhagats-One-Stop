@@ -49,7 +49,7 @@ function ActionMenu({ customer, onOpenEdit, onDelete }: {
 
   return (
     <div className="relative" ref={ref}>
-      <button onClick={() => setOpen(o => !o)} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-gray-400 hover:text-gray-700 dark:hover:text-white">
+      <button onClick={() => setOpen(o => !o)} aria-label="Customer actions" className="p-3 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-gray-400 hover:text-gray-700 dark:hover:text-white">
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 16 16"><circle cx="8" cy="2" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="14" r="1.5"/></svg>
       </button>
       {open && (
@@ -130,6 +130,7 @@ export function CustomerTable({ customers, onFilter, onDelete, onEdit }: Custome
         </div>
 
         <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-gray-100 dark:border-slate-800 overflow-hidden shadow-sm transition-colors">
+          <div className="relative">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -173,6 +174,8 @@ export function CustomerTable({ customers, onFilter, onDelete, onEdit }: Custome
                 )}
               </tbody>
             </table>
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white dark:from-slate-900 to-transparent" />
           </div>
           <TablePagination total={sorted.length} page={page} onPageChange={setPage} />
         </div>

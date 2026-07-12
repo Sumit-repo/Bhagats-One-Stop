@@ -36,7 +36,7 @@ export function EditCustomerModal({ customer, onClose, onSave }: EditCustomerMod
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-2xl w-full max-w-md">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-2xl w-full max-w-md max-h-[90dvh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
@@ -48,7 +48,7 @@ export function EditCustomerModal({ customer, onClose, onSave }: EditCustomerMod
               <p className="text-xs text-gray-500 dark:text-slate-400 font-medium">{customer.name}</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+          <button onClick={onClose} aria-label="Close" className="p-3 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>

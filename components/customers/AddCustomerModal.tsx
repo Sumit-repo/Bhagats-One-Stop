@@ -31,7 +31,7 @@ export function AddCustomerModal({ isOpen, onClose, onAdd }: AddCustomerModalPro
 
   return (
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-8 border border-gray-100 dark:border-slate-800 shadow-2xl">
+      <div className="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl p-8 border border-gray-100 dark:border-slate-800 shadow-2xl max-h-[90dvh] overflow-y-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
@@ -39,7 +39,7 @@ export function AddCustomerModal({ isOpen, onClose, onAdd }: AddCustomerModalPro
             </div>
             <h2 className="text-2xl font-black text-gray-900 dark:text-white">Add Customer</h2>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+          <button onClick={onClose} aria-label="Close" className="p-3 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
             <X className="w-6 h-6 text-gray-400" />
           </button>
         </div>

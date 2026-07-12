@@ -65,28 +65,28 @@ export default function ReportsPage() {
               
               <div className="relative">
                 <div className="flex flex-wrap items-center gap-2 bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl border border-gray-200 dark:border-slate-800 self-start">
-                  <button 
+                  <button
                     onClick={() => { setActiveFilter('7'); setIsCustomOpen(false); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '7' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '7' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
                     <Calendar className="w-4 h-4" />
                     Last 7 Days
                   </button>
-                  <button 
+                  <button
                     onClick={() => { setActiveFilter('30'); setIsCustomOpen(false); }}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '30' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === '30' ? 'bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
                     <Calendar className="w-4 h-4" />
                     Last 30 Days
                   </button>
-                  <button 
+                  <button
                     onClick={() => setIsCustomOpen(!isCustomOpen)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === 'custom' || isCustomOpen ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
+                    className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold transition-all text-sm shadow-sm ${activeFilter === 'custom' || isCustomOpen ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/20' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'}`}>
                     <CalendarRange className="w-4 h-4" />
                     Custom {activeFilter === 'custom' && customStart && `(${new Date(customStart).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})} - ${new Date(customEnd).toLocaleDateString('en-US', {month: 'short', day: 'numeric'})})`}
                   </button>
                 </div>
 
                 {isCustomOpen && (
-                  <div className="absolute right-0 top-14 w-[320px] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-2xl rounded-2xl p-5 z-50">
+                  <div className="absolute left-0 sm:left-auto sm:right-0 top-14 w-[min(320px,calc(100vw-2rem))] bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-2xl rounded-2xl p-5 z-50">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">Custom Range</h4>
                       <button onClick={cancelCustomFilter} className="text-gray-400 hover:text-gray-600 dark:hover:text-slate-300"><X className="w-4 h-4" /></button>

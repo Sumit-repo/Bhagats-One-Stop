@@ -34,17 +34,17 @@ export default function SupariFarmPage() {
     <DashboardShell>
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-y-auto">
-          <div className="p-8">
-            <div className="mb-8 flex items-center justify-between">
+          <div className="p-4 sm:p-8">
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-1">Supari Farm Management</h1>
+                <h1 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white tracking-tight mb-1">Supari Farm Management</h1>
                 <p className="text-gray-500 dark:text-slate-400 font-medium">Track your areca nut farm expenses and earnings</p>
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="flex items-center gap-2 px-8 py-4 bg-amber-600 text-white rounded-[2rem] font-black text-lg hover:bg-amber-700 transition-all shadow-xl shadow-amber-200 dark:shadow-none hover:scale-[1.02] active:scale-95"
+                className="flex items-center justify-center gap-2 px-6 py-3 sm:px-8 sm:py-4 bg-amber-600 text-white rounded-[2rem] font-black text-base sm:text-lg hover:bg-amber-700 transition-all shadow-xl shadow-amber-200 dark:shadow-none hover:scale-[1.02] active:scale-95 shrink-0"
               >
-                <Plus className="w-6 h-6" />
+                <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                 Add Entry
               </button>
             </div>

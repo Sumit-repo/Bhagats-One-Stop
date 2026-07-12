@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Trash2, Sprout } from 'lucide-react';
 import { SupariFarmEarning } from '@/models/SupariFarm';
+import { TablePagination, PAGE_SIZE } from '@/components/ui/TablePagination';
 
 interface EarningTableProps {
   earnings: SupariFarmEarning[];
@@ -10,8 +12,10 @@ interface EarningTableProps {
 }
 
 export function EarningTable({ earnings, onDelete }: EarningTableProps) {
+  const [page, setPage] = useState(1);
   const total = earnings.reduce((sum, e) => sum + e.total_amount, 0);
   const totalKg = earnings.reduce((sum, e) => sum + e.quantity_kg, 0);
+  const paged = earnings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden transition-colors">
@@ -44,14 +48,14 @@ export function EarningTable({ earnings, onDelete }: EarningTableProps) {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-            {earnings.length === 0 ? (
+            {paged.length === 0 ? (
               <tr>
                 <td colSpan={6} className="py-14 text-center text-gray-400 dark:text-slate-500 font-medium italic text-sm">
                   No earnings recorded yet. Add an entry to get started.
                 </td>
               </tr>
             ) : (
-              earnings.map((earning) => (
+              paged.map((earning) => (
                 <tr key={earning.id} className="group hover:bg-gray-50/50 dark:hover:bg-slate-800/30 transition-colors">
                   <td className="px-5 py-4 text-sm font-mono font-medium text-gray-500 dark:text-slate-400 italic">
                     {format(new Date(earning.date), 'dd MMM yy')}
@@ -73,7 +77,8 @@ export function EarningTable({ earnings, onDelete }: EarningTableProps) {
                   <td className="px-5 py-4 text-right">
                     <button
                       onClick={() => onDelete(earning.id)}
-                      className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-300 dark:text-slate-600 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover:opacity-100"
+                      aria-label="Delete earning"
+                      className="p-3 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 sm:opacity-0 sm:group-hover:opacity-100"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -84,6 +89,7 @@ export function EarningTable({ earnings, onDelete }: EarningTableProps) {
           </tbody>
         </table>
       </div>
+      <TablePagination total={earnings.length} page={page} onPageChange={setPage} />
     </div>
   );
 }

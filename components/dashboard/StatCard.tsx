@@ -37,7 +37,7 @@ export function StatCard({ icon: Icon, title, value, change, trend, variant = 'b
         </div>
         {trend && (
           <div className="flex-1 ml-4 h-8">
-            <svg className="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none">
+            <svg className="w-full h-full" viewBox="0 0 100 30" preserveAspectRatio="none" aria-hidden="true">
               <polyline
                 points={trend.map((val, i) => `${(i / (trend.length - 1)) * 100},${30 - val * 25}`).join(' ')}
                 fill="none"
